@@ -1,1286 +1,3314 @@
 <!DOCTYPE html>
+<html lang="fr" data-theme="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Digit's Créa Awards – 1ère Édition | AndroCréa</title>
+  <meta name="description" content="Le Grand Concours des Créateurs Digitaux du Bénin. Inscrivez-vous, votez pour vos créateurs préférés.">
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;0,900;1,400;1,700&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <!-- Font Awesome 6 -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" crossorigin="anonymous">
+
+  <style>
+    /* =========================================
+       CSS CUSTOM PROPERTIES & THEME
+    ========================================= */
+    :root {
+      /* Dark theme (default) */
+      --bg-primary: #090810;
+      --bg-secondary: #0f0d1a;
+      --bg-card: rgba(255,255,255,0.04);
+      --bg-glass: rgba(255,255,255,0.06);
+      --bg-glass-heavy: rgba(255,255,255,0.10);
+      --border-gold: rgba(212,175,55,0.4);
+      --border-gold-bright: rgba(212,175,55,0.8);
+      --text-primary: #f5f0e8;
+      --text-secondary: rgba(245,240,232,0.65);
+      --text-muted: rgba(245,240,232,0.38);
+      --gold: #D4AF37;
+      --gold-light: #F5D76E;
+      --gold-dark: #9A7B20;
+      --burgundy: #6B1C2A;
+      --accent-violet: #3B1A5E;
+      --shadow-gold: 0 0 40px rgba(212,175,55,0.2);
+      --shadow-gold-intense: 0 0 60px rgba(212,175,55,0.35), 0 0 120px rgba(212,175,55,0.1);
+      --gradient-hero: linear-gradient(135deg, #090810 0%, #1a0a2e 40%, #0d0a18 70%, #090810 100%);
+      --gradient-gold: linear-gradient(135deg, #D4AF37, #F5D76E, #9A7B20);
+      --gradient-card: linear-gradient(145deg, rgba(212,175,55,0.08) 0%, rgba(59,26,94,0.1) 100%);
+      --nav-bg: rgba(9,8,16,0.85);
+    }
+
+    [data-theme="light"] {
+      --bg-primary: #faf7f0;
+      --bg-secondary: #f2ede0;
+      --bg-card: rgba(0,0,0,0.03);
+      --bg-glass: rgba(212,175,55,0.08);
+      --bg-glass-heavy: rgba(212,175,55,0.14);
+      --border-gold: rgba(154,123,32,0.3);
+      --border-gold-bright: rgba(154,123,32,0.7);
+      --text-primary: #1a1208;
+      --text-secondary: rgba(26,18,8,0.65);
+      --text-muted: rgba(26,18,8,0.38);
+      --gold: #9A7B20;
+      --gold-light: #C4971A;
+      --gold-dark: #6B5410;
+      --burgundy: #8B1A2A;
+      --accent-violet: #4a2580;
+      --shadow-gold: 0 0 30px rgba(154,123,32,0.15);
+      --shadow-gold-intense: 0 0 50px rgba(154,123,32,0.25), 0 0 100px rgba(154,123,32,0.08);
+      --gradient-hero: linear-gradient(135deg, #faf7f0 0%, #f0e8d5 40%, #f5f0e5 70%, #faf7f0 100%);
+      --gradient-gold: linear-gradient(135deg, #9A7B20, #C4971A, #6B5410);
+      --gradient-card: linear-gradient(145deg, rgba(154,123,32,0.08) 0%, rgba(74,37,128,0.05) 100%);
+      --nav-bg: rgba(250,247,240,0.9);
+    }
+
+    /* =========================================
+       RESET & BASE
+    ========================================= */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html { scroll-behavior: smooth; font-size: 16px; }
+
+    body {
+      font-family: 'Outfit', sans-serif;
+      background: var(--bg-primary);
+      color: var(--text-primary);
+      overflow-x: hidden;
+      transition: background 0.5s ease, color 0.5s ease;
+      line-height: 1.7;
+    }
+
+    /* =========================================
+       PAGE LOADER
+    ========================================= */
+    #page-loader {
+      position: fixed; inset: 0;
+      background: var(--bg-primary);
+      display: flex; align-items: center; justify-content: center;
+      z-index: 9999;
+      flex-direction: column; gap: 1.5rem;
+      transition: opacity 0.8s ease, visibility 0.8s ease;
+    }
+    #page-loader.hidden { opacity: 0; visibility: hidden; }
+    .loader-logo {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(1.8rem, 4vw, 2.8rem);
+      font-weight: 900;
+      letter-spacing: 0.08em;
+      background: var(--gradient-gold);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      animation: pulse-glow 1.5s ease-in-out infinite;
+    }
+    .loader-bar {
+      width: 200px; height: 2px;
+      background: rgba(212,175,55,0.2);
+      border-radius: 2px;
+      overflow: hidden;
+    }
+    .loader-fill {
+      height: 100%;
+      background: var(--gradient-gold);
+      border-radius: 2px;
+      animation: loader-progress 1.8s ease forwards;
+    }
+    @keyframes loader-progress {
+      0% { width: 0%; }
+      100% { width: 100%; }
+    }
+    @keyframes pulse-glow {
+      0%,100% { filter: drop-shadow(0 0 8px rgba(212,175,55,0.4)); }
+      50% { filter: drop-shadow(0 0 20px rgba(212,175,55,0.8)); }
+    }
+
+    /* =========================================
+       CANVAS PARTICLES BACKGROUND
+    ========================================= */
+    #particles-canvas {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      pointer-events: none;
+      z-index: 0;
+      opacity: 0.5;
+    }
+
+    /* =========================================
+       NAVIGATION
+    ========================================= */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0;
+      z-index: 1000;
+      background: var(--nav-bg);
+      backdrop-filter: blur(20px) saturate(1.5);
+      -webkit-backdrop-filter: blur(20px) saturate(1.5);
+      border-bottom: 1px solid var(--border-gold);
+      padding: 1.2rem 2rem;
+      display: flex; align-items: center; justify-content: space-between;
+      transition: all 0.4s ease;
+    }
+    nav.scrolled {
+      padding: 0.7rem 2rem;
+      box-shadow: 0 4px 40px rgba(212,175,55,0.1);
+    }
+    .nav-logo {
+      font-family: 'Playfair Display', serif;
+      font-weight: 900;
+      font-size: 1.3rem;
+      letter-spacing: 0.06em;
+      background: var(--gradient-gold);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      text-decoration: none;
+    }
+    .nav-logo span { font-style: italic; }
+    .nav-links {
+      display: flex; gap: 2rem; list-style: none;
+      align-items: center;
+    }
+    .nav-links a {
+      color: var(--text-secondary);
+      text-decoration: none;
+      font-size: 0.85rem;
+      font-weight: 500;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      transition: color 0.3s;
+      position: relative;
+    }
+    .nav-links a::after {
+      content: '';
+      position: absolute;
+      bottom: -3px; left: 0;
+      width: 0; height: 1px;
+      background: var(--gold);
+      transition: width 0.3s ease;
+    }
+    .nav-links a:hover { color: var(--gold); }
+    .nav-links a:hover::after { width: 100%; }
+    .nav-right { display: flex; align-items: center; gap: 1rem; }
+    .btn-nav {
+      padding: 0.55rem 1.4rem;
+      background: var(--gradient-gold);
+      color: #090810 !important;
+      border-radius: 2px;
+      font-weight: 700;
+      font-size: 0.82rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      cursor: pointer;
+      border: none;
+      transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
+    }
+    .btn-nav::after { display: none; }
+    .btn-nav:hover { transform: translateY(-2px); box-shadow: var(--shadow-gold); }
+
+    /* Theme Toggle */
+    .theme-toggle {
+      width: 40px; height: 40px;
+      border-radius: 50%;
+      background: var(--bg-glass);
+      border: 1px solid var(--border-gold);
+      color: var(--gold);
+      cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 0.9rem;
+      transition: all 0.3s ease;
+    }
+    .theme-toggle:hover {
+      background: var(--bg-glass-heavy);
+      box-shadow: var(--shadow-gold);
+      transform: rotate(20deg);
+    }
+
+    /* Burger */
+    .burger {
+      display: none;
+      flex-direction: column; gap: 5px;
+      cursor: pointer; padding: 5px;
+    }
+    .burger span {
+      display: block;
+      width: 24px; height: 2px;
+      background: var(--gold);
+      transition: all 0.3s;
+    }
+
+    /* Mobile menu */
+    .mobile-menu {
+      display: none;
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: var(--bg-primary);
+      z-index: 999;
+      flex-direction: column;
+      align-items: center; justify-content: center;
+      gap: 2rem;
+      opacity: 0;
+      visibility: hidden;
+      transition: all 0.4s ease;
+    }
+    .mobile-menu.open { opacity: 1; visibility: visible; display: flex; }
+    .mobile-menu a {
+      font-family: 'Playfair Display', serif;
+      font-size: 2rem;
+      color: var(--text-primary);
+      text-decoration: none;
+      transition: color 0.3s;
+    }
+    .mobile-menu a:hover { color: var(--gold); }
+    .mobile-close {
+      position: absolute;
+      top: 1.5rem; right: 2rem;
+      font-size: 1.5rem;
+      color: var(--gold);
+      cursor: pointer;
+      background: none; border: none;
+    }
+
+    @media (max-width: 1024px) {
+      .nav-links { display: none; }
+      .btn-nav { display: none; }
+      .burger { display: flex; }
+    }
+
+    /* =========================================
+       SECTIONS BASE
+    ========================================= */
+    section {
+      position: relative;
+      z-index: 1;
+    }
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 2rem;
+    }
+
+    /* Section header */
+    .section-tag {
+      display: inline-block;
+      font-size: 0.72rem;
+      font-weight: 700;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 1rem;
+      padding: 0.35rem 1rem;
+      border: 1px solid var(--border-gold);
+      border-radius: 2px;
+    }
+    .section-title {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(2rem, 4vw, 3.2rem);
+      font-weight: 700;
+      line-height: 1.15;
+      margin-bottom: 1.2rem;
+    }
+    .section-title em {
+      font-style: italic;
+      color: var(--gold);
+    }
+    .section-subtitle {
+      color: var(--text-secondary);
+      font-size: 1.05rem;
+      max-width: 600px;
+      font-weight: 300;
+      line-height: 1.8;
+    }
+    .divider-gold {
+      width: 60px; height: 2px;
+      background: var(--gradient-gold);
+      margin: 1.5rem 0;
+    }
+    .divider-center { margin: 1.5rem auto; }
+
+    /* =========================================
+       SCROLL ANIMATION BASE
+    ========================================= */
+    .reveal {
+      opacity: 0;
+      transform: translateY(50px);
+      transition: opacity 0.8s cubic-bezier(0.16,1,0.3,1),
+                  transform 0.8s cubic-bezier(0.16,1,0.3,1);
+    }
+    .reveal.from-left {
+      transform: translateX(-80px);
+    }
+    .reveal.from-right {
+      transform: translateX(80px);
+    }
+    .reveal.visible {
+      opacity: 1 !important;
+      transform: translate(0,0) !important;
+    }
+    .reveal-delay-1 { transition-delay: 0.1s; }
+    .reveal-delay-2 { transition-delay: 0.2s; }
+    .reveal-delay-3 { transition-delay: 0.3s; }
+    .reveal-delay-4 { transition-delay: 0.4s; }
+    .reveal-delay-5 { transition-delay: 0.5s; }
+
+    @media (prefers-reduced-motion: reduce) {
+      .reveal { opacity: 1 !important; transform: none !important; transition: none !important; }
+      * { animation-duration: 0.001ms !important; transition-duration: 0.001ms !important; }
+    }
+
+    /* =========================================
+       HERO SECTION
+    ========================================= */
+    #hero {
+      min-height: 100vh;
+      display: flex; align-items: center;
+      background: var(--gradient-hero);
+      padding: 8rem 2rem 5rem;
+      position: relative;
+      overflow: hidden;
+    }
+    /* Radial glow background */
+    #hero::before {
+      content: '';
+      position: absolute;
+      top: -20%; left: 50%;
+      transform: translateX(-50%);
+      width: 900px; height: 900px;
+      background: radial-gradient(circle, rgba(212,175,55,0.08) 0%, transparent 65%);
+      pointer-events: none;
+    }
+    #hero::after {
+      content: '';
+      position: absolute;
+      bottom: -10%; right: -10%;
+      width: 600px; height: 600px;
+      background: radial-gradient(circle, rgba(59,26,94,0.15) 0%, transparent 65%);
+      pointer-events: none;
+    }
+    .hero-inner {
+      max-width: 1200px; margin: 0 auto;
+      width: 100%;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 4rem;
+      align-items: center;
+      position: relative; z-index: 2;
+    }
+    .hero-badge {
+      display: inline-flex; align-items: center; gap: 0.5rem;
+      padding: 0.4rem 1rem;
+      border: 1px solid var(--border-gold);
+      border-radius: 100px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 1.5rem;
+      background: var(--bg-glass);
+      backdrop-filter: blur(10px);
+    }
+    .hero-badge i { font-size: 0.6rem; animation: spin-star 4s linear infinite; }
+    @keyframes spin-star { to { transform: rotate(360deg); } }
+    .hero-edition {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1rem;
+      font-weight: 300;
+      letter-spacing: 0.4em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 0.8rem;
+    }
+    .hero-title {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(3rem, 6vw, 5.5rem);
+      font-weight: 900;
+      line-height: 1.0;
+      margin-bottom: 1.5rem;
+    }
+    .hero-title .line-gold {
+      display: block;
+      background: var(--gradient-gold);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .hero-title .line-italic {
+      display: block;
+      font-style: italic;
+      font-size: 0.75em;
+      color: var(--text-secondary);
+    }
+    .hero-desc {
+      color: var(--text-secondary);
+      font-size: 1.05rem;
+      font-weight: 300;
+      line-height: 1.85;
+      margin-bottom: 2.5rem;
+      max-width: 480px;
+    }
+    .hero-ctas {
+      display: flex; gap: 1rem;
+      flex-wrap: wrap;
+    }
+    .btn-primary {
+      padding: 0.9rem 2.2rem;
+      background: var(--gradient-gold);
+      color: #090810;
+      border: none;
+      border-radius: 2px;
+      font-family: 'Outfit', sans-serif;
+      font-weight: 700;
+      font-size: 0.9rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      cursor: pointer;
+      position: relative;
+      overflow: hidden;
+      transition: all 0.3s ease;
+      text-decoration: none;
+      display: inline-flex; align-items: center; gap: 0.6rem;
+    }
+    .btn-primary:hover {
+      transform: translateY(-3px);
+      box-shadow: var(--shadow-gold-intense);
+    }
+    /* Ripple effect */
+    .btn-primary::before {
+      content: '';
+      position: absolute;
+      width: 0; height: 0;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.3);
+      top: 50%; left: 50%;
+      transform: translate(-50%,-50%);
+      transition: width 0.6s ease, height 0.6s ease, opacity 0.6s;
+      opacity: 0;
+    }
+    .btn-primary:active::before { width: 200px; height: 200px; opacity: 0; }
+
+    .btn-secondary {
+      padding: 0.9rem 2.2rem;
+      background: transparent;
+      color: var(--gold);
+      border: 1px solid var(--border-gold-bright);
+      border-radius: 2px;
+      font-family: 'Outfit', sans-serif;
+      font-weight: 600;
+      font-size: 0.9rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      text-decoration: none;
+      display: inline-flex; align-items: center; gap: 0.6rem;
+    }
+    .btn-secondary:hover {
+      background: var(--bg-glass);
+      transform: translateY(-3px);
+      box-shadow: var(--shadow-gold);
+    }
+
+    /* Hero visual / right column */
+    .hero-visual {
+      position: relative;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .hero-trophy {
+      width: 340px; height: 340px;
+      background: var(--gradient-card);
+      border: 1px solid var(--border-gold);
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      position: relative;
+      animation: float-trophy 4s ease-in-out infinite;
+    }
+    @keyframes float-trophy {
+      0%,100% { transform: translateY(0); }
+      50% { transform: translateY(-16px); }
+    }
+    .hero-trophy::before {
+      content: '';
+      position: absolute; inset: -12px;
+      border-radius: 50%;
+      border: 1px solid var(--border-gold);
+      opacity: 0.4;
+      animation: ring-pulse 3s ease-in-out infinite;
+    }
+    .hero-trophy::after {
+      content: '';
+      position: absolute; inset: -24px;
+      border-radius: 50%;
+      border: 1px solid var(--border-gold);
+      opacity: 0.2;
+      animation: ring-pulse 3s ease-in-out infinite 0.5s;
+    }
+    @keyframes ring-pulse {
+      0%,100% { opacity: 0.2; transform: scale(1); }
+      50% { opacity: 0.5; transform: scale(1.02); }
+    }
+    .trophy-icon {
+      font-size: 8rem;
+      background: var(--gradient-gold);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      filter: drop-shadow(0 0 30px rgba(212,175,55,0.5));
+    }
+    .hero-stats-float {
+      position: absolute;
+      display: flex; flex-direction: column; gap: 0.8rem;
+    }
+    .hero-stats-float .stat-pill {
+      background: var(--bg-glass-heavy);
+      backdrop-filter: blur(20px);
+      border: 1px solid var(--border-gold);
+      border-radius: 100px;
+      padding: 0.6rem 1.2rem;
+      display: flex; align-items: center; gap: 0.7rem;
+      font-size: 0.82rem;
+      font-weight: 600;
+      white-space: nowrap;
+    }
+    .stat-pill.left { left: -4rem; }
+    .stat-pill.right { right: -4rem; }
+    .stat-pill i { color: var(--gold); }
+    .stat-pill .val { color: var(--gold); font-weight: 700; }
+
+    /* Countdown timer in hero */
+    .hero-countdown {
+      margin-top: 2.5rem;
+      display: flex; align-items: center; gap: 1rem;
+      flex-wrap: wrap;
+    }
+    .countdown-label {
+      font-size: 0.72rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      font-weight: 600;
+    }
+    .countdown-units {
+      display: flex; gap: 0.6rem;
+    }
+    .countdown-unit {
+      display: flex; flex-direction: column; align-items: center;
+      background: var(--bg-glass);
+      border: 1px solid var(--border-gold);
+      padding: 0.5rem 0.7rem;
+      border-radius: 4px;
+      min-width: 50px;
+    }
+    .countdown-num {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.4rem;
+      font-weight: 700;
+      color: var(--gold);
+      line-height: 1;
+    }
+    .countdown-lbl {
+      font-size: 0.6rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      margin-top: 2px;
+    }
+
+    @media (max-width: 1024px) {
+      .hero-inner { grid-template-columns: 1fr; gap: 3rem; }
+      .hero-visual { display: none; }
+    }
+    @media (max-width: 640px) {
+      #hero { padding: 7rem 1.5rem 4rem; }
+      .hero-ctas { flex-direction: column; }
+      .btn-primary, .btn-secondary { text-align: center; justify-content: center; }
+    }
+
+    /* =========================================
+       ABOUT SECTION
+    ========================================= */
+    #about {
+      padding: 7rem 2rem;
+      background: var(--bg-secondary);
+      position: relative;
+      overflow: hidden;
+    }
+    #about::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0; height: 1px;
+      background: linear-gradient(90deg, transparent, var(--gold), transparent);
+      opacity: 0.4;
+    }
+    .about-inner {
+      max-width: 1200px; margin: 0 auto;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 5rem;
+      align-items: center;
+    }
+    .about-image-wrap {
+      position: relative;
+    }
+    .about-image-box {
+      width: 100%; aspect-ratio: 4/5;
+      background: var(--gradient-card);
+      border: 1px solid var(--border-gold);
+      border-radius: 2px;
+      overflow: hidden;
+      position: relative;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .about-image-box img {
+      width: 100%; height: 100%;
+      object-fit: cover;
+      opacity: 0.8;
+      filter: grayscale(20%) contrast(1.05);
+    }
+    .about-image-box::after {
+      content: '';
+      position: absolute; inset: 0;
+      background: linear-gradient(180deg, transparent 50%, rgba(9,8,16,0.6) 100%);
+    }
+    .about-tag-float {
+      position: absolute;
+      bottom: -1.5rem; right: -1.5rem;
+      background: var(--gradient-gold);
+      color: #090810;
+      padding: 1.2rem 1.8rem;
+      font-family: 'Playfair Display', serif;
+      font-size: 1rem;
+      font-weight: 700;
+      line-height: 1.2;
+      text-align: center;
+    }
+    .about-text { }
+    .about-points {
+      margin-top: 2rem;
+      display: flex; flex-direction: column; gap: 1.2rem;
+    }
+    .about-point {
+      display: flex; gap: 1rem; align-items: flex-start;
+    }
+    .about-point-icon {
+      width: 40px; height: 40px; flex-shrink: 0;
+      background: var(--bg-glass);
+      border: 1px solid var(--border-gold);
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      color: var(--gold);
+      font-size: 0.9rem;
+    }
+    .about-point-text strong {
+      display: block;
+      font-size: 0.9rem;
+      font-weight: 600;
+      color: var(--text-primary);
+      margin-bottom: 0.2rem;
+    }
+    .about-point-text p {
+      font-size: 0.88rem;
+      color: var(--text-secondary);
+      line-height: 1.6;
+    }
+    @media (max-width: 1024px) {
+      .about-inner { grid-template-columns: 1fr; gap: 3rem; }
+      .about-image-wrap { max-width: 480px; margin: 0 auto; width: 100%; }
+    }
+
+    /* =========================================
+       CATEGORIES SECTION
+    ========================================= */
+    #categories {
+      padding: 7rem 2rem;
+      background: var(--bg-primary);
+    }
+    .categories-header {
+      text-align: center;
+      margin-bottom: 4rem;
+    }
+    .categories-grid {
+      max-width: 1200px; margin: 0 auto;
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 1.5rem;
+    }
+    .cat-card {
+      background: var(--bg-glass);
+      border: 1px solid var(--border-gold);
+      border-radius: 2px;
+      padding: 2.5rem 1.5rem 2rem;
+      text-align: center;
+      transition: all 0.4s cubic-bezier(0.16,1,0.3,1);
+      cursor: default;
+      position: relative;
+      overflow: hidden;
+      background: var(--gradient-card);
+    }
+    .cat-card::before {
+      content: '';
+      position: absolute; inset: 0;
+      background: var(--gradient-gold);
+      opacity: 0;
+      transition: opacity 0.4s;
+    }
+    .cat-card:hover {
+      transform: translateY(-8px);
+      border-color: var(--gold);
+      box-shadow: var(--shadow-gold-intense);
+    }
+    .cat-card:hover .cat-icon { transform: scale(1.15); color: var(--bg-primary); }
+    .cat-card:hover .cat-name { color: var(--bg-primary); }
+    .cat-card:hover::before { opacity: 1; }
+    .cat-card:hover * { position: relative; z-index: 1; }
+    .cat-icon {
+      font-size: 2.8rem;
+      color: var(--gold);
+      margin-bottom: 1.2rem;
+      display: block;
+      transition: all 0.4s;
+    }
+    .cat-name {
+      font-family: 'Playfair Display', serif;
+      font-size: 1rem;
+      font-weight: 600;
+      color: var(--text-primary);
+      margin-bottom: 0.6rem;
+      transition: color 0.4s;
+    }
+    .cat-count {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      transition: color 0.4s;
+    }
+    @media (max-width: 1024px) {
+      .categories-grid { grid-template-columns: repeat(3, 1fr); }
+    }
+    @media (max-width: 640px) {
+      .categories-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+
+    /* =========================================
+       NOMINEES SECTION
+    ========================================= */
+    #nominees {
+      padding: 7rem 2rem;
+      background: var(--bg-secondary);
+    }
+    #nominees::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0; height: 1px;
+      background: linear-gradient(90deg, transparent, var(--gold), transparent);
+      opacity: 0.3;
+    }
+    .nominees-header {
+      text-align: center;
+      margin-bottom: 4rem;
+      max-width: 600px; margin-left: auto; margin-right: auto;
+    }
+    .nominees-grid {
+      max-width: 1200px; margin: 0 auto 3rem;
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 2rem;
+    }
+    .nominee-card {
+      background: var(--gradient-card);
+      border: 1px solid var(--border-gold);
+      border-radius: 2px;
+      overflow: hidden;
+      transition: all 0.5s cubic-bezier(0.16,1,0.3,1);
+      cursor: pointer;
+      position: relative;
+    }
+    .nominee-card:hover {
+      transform: translateY(-10px) scale(1.01);
+      box-shadow: var(--shadow-gold-intense);
+      border-color: var(--gold);
+    }
+    .nominee-card:hover .nominee-photo { transform: scale(1.05); }
+    .nominee-photo-wrap {
+      overflow: hidden;
+      aspect-ratio: 4/3;
+      position: relative;
+    }
+    .nominee-photo {
+      width: 100%; height: 100%;
+      object-fit: cover;
+      transition: transform 0.6s cubic-bezier(0.16,1,0.3,1);
+      filter: grayscale(10%);
+    }
+    .nominee-photo-overlay {
+      position: absolute; inset: 0;
+      background: linear-gradient(0deg, rgba(9,8,16,0.85) 0%, transparent 50%);
+    }
+    .nominee-votes-badge {
+      position: absolute;
+      top: 1rem; right: 1rem;
+      background: var(--bg-glass-heavy);
+      backdrop-filter: blur(10px);
+      border: 1px solid var(--border-gold);
+      border-radius: 100px;
+      padding: 0.3rem 0.7rem;
+      font-size: 0.72rem;
+      font-weight: 700;
+      color: var(--gold);
+      display: flex; align-items: center; gap: 0.3rem;
+    }
+    .nominee-body {
+      padding: 1.5rem;
+    }
+    .nominee-cat {
+      font-size: 0.7rem;
+      font-weight: 700;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 0.4rem;
+    }
+    .nominee-name {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: var(--text-primary);
+      margin-bottom: 0.5rem;
+    }
+    .nominee-desc {
+      font-size: 0.85rem;
+      color: var(--text-secondary);
+      line-height: 1.6;
+      margin-bottom: 1.2rem;
+    }
+    .nominee-progress-wrap {
+      margin-bottom: 1.2rem;
+    }
+    .nominee-progress-label {
+      display: flex; justify-content: space-between;
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      margin-bottom: 0.4rem;
+    }
+    .nominee-progress-bar {
+      height: 3px;
+      background: var(--bg-glass);
+      border-radius: 3px;
+      overflow: hidden;
+    }
+    .nominee-progress-fill {
+      height: 100%;
+      background: var(--gradient-gold);
+      border-radius: 3px;
+      width: 0%;
+      transition: width 1.5s cubic-bezier(0.16,1,0.3,1) 0.5s;
+    }
+    .nominee-progress-fill.animated { width: var(--w); }
+    .btn-vote {
+      width: 100%;
+      padding: 0.75rem;
+      background: transparent;
+      border: 1px solid var(--border-gold-bright);
+      color: var(--gold);
+      font-family: 'Outfit', sans-serif;
+      font-weight: 700;
+      font-size: 0.82rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      cursor: pointer;
+      border-radius: 2px;
+      transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
+    }
+    .btn-vote::before {
+      content: '';
+      position: absolute; inset: 0;
+      background: var(--gradient-gold);
+      opacity: 0;
+      transition: opacity 0.3s;
+    }
+    .btn-vote:hover::before { opacity: 1; }
+    .btn-vote:hover { color: #090810; }
+    .btn-vote span { position: relative; z-index: 1; }
+
+    @media (max-width: 1024px) {
+      .nominees-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+    @media (max-width: 640px) {
+      .nominees-grid { grid-template-columns: 1fr; }
+    }
+
+    /* =========================================
+       STATS SECTION
+    ========================================= */
+    #stats {
+      padding: 6rem 2rem;
+      background: linear-gradient(135deg, var(--bg-primary) 0%, var(--accent-violet) 50%, var(--bg-primary) 100%);
+      position: relative;
+    }
+    #stats::before {
+      content: '';
+      position: absolute; inset: 0;
+      background: radial-gradient(ellipse at center, rgba(212,175,55,0.06) 0%, transparent 70%);
+    }
+    .stats-inner {
+      max-width: 1100px; margin: 0 auto;
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 2rem;
+      position: relative; z-index: 1;
+    }
+    .stat-card {
+      text-align: center;
+      padding: 2.5rem 1.5rem;
+      background: var(--bg-glass);
+      backdrop-filter: blur(20px);
+      border: 1px solid var(--border-gold);
+      border-radius: 2px;
+      transition: all 0.4s;
+    }
+    .stat-card:hover {
+      transform: translateY(-6px);
+      box-shadow: var(--shadow-gold);
+      border-color: var(--gold);
+    }
+    .stat-icon {
+      font-size: 1.8rem;
+      color: var(--gold);
+      margin-bottom: 1rem;
+    }
+    .stat-number {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(2.5rem, 5vw, 3.5rem);
+      font-weight: 900;
+      background: var(--gradient-gold);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      line-height: 1;
+      margin-bottom: 0.5rem;
+    }
+    .stat-label {
+      font-size: 0.82rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      font-weight: 500;
+    }
+    @media (max-width: 1024px) {
+      .stats-inner { grid-template-columns: repeat(2, 1fr); }
+    }
+    @media (max-width: 640px) {
+      .stats-inner { grid-template-columns: 1fr 1fr; }
+    }
+
+    /* =========================================
+       HOW TO VOTE SECTION
+    ========================================= */
+    #how-to-vote {
+      padding: 7rem 2rem;
+      background: var(--bg-primary);
+    }
+    .vote-header {
+      text-align: center;
+      margin-bottom: 4rem;
+    }
+    .vote-steps-wrap {
+      max-width: 1200px; margin: 0 auto;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 4rem;
+      align-items: start;
+    }
+    .vote-steps {
+      display: flex; flex-direction: column; gap: 2rem;
+    }
+    .vote-step {
+      display: flex; gap: 1.5rem;
+      align-items: flex-start;
+    }
+    .step-number {
+      width: 50px; height: 50px; flex-shrink: 0;
+      background: transparent;
+      border: 1px solid var(--border-gold-bright);
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-family: 'Playfair Display', serif;
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: var(--gold);
+      transition: all 0.3s;
+    }
+    .vote-step:hover .step-number {
+      background: var(--gradient-gold);
+      color: #090810;
+      border-color: var(--gold);
+      box-shadow: var(--shadow-gold);
+    }
+    .step-content h4 {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.1rem;
+      font-weight: 600;
+      margin-bottom: 0.4rem;
+    }
+    .step-content p {
+      font-size: 0.9rem;
+      color: var(--text-secondary);
+      line-height: 1.7;
+    }
+
+    /* Payment methods */
+    .payment-section {
+      padding: 2.5rem;
+      background: var(--gradient-card);
+      border: 1px solid var(--border-gold);
+      border-radius: 2px;
+    }
+    .payment-section h3 {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.4rem;
+      margin-bottom: 1.5rem;
+    }
+    .payment-methods {
+      display: flex; gap: 1rem; flex-wrap: wrap;
+      margin-bottom: 1.5rem;
+    }
+    .payment-method {
+      display: flex; flex-direction: column; align-items: center; gap: 0.5rem;
+      padding: 1rem 1.5rem;
+      background: var(--bg-glass);
+      border: 1px solid var(--border-gold);
+      border-radius: 2px;
+      font-size: 0.8rem;
+      font-weight: 600;
+      color: var(--text-secondary);
+      transition: all 0.3s;
+      cursor: default;
+    }
+    .payment-method i { font-size: 1.8rem; color: var(--gold); }
+    .payment-method:hover {
+      border-color: var(--gold);
+      color: var(--text-primary);
+      transform: translateY(-3px);
+      box-shadow: var(--shadow-gold);
+    }
+    .vote-advantages {
+      margin-top: 1.5rem;
+      display: flex; flex-direction: column; gap: 0.7rem;
+    }
+    .vote-adv {
+      display: flex; align-items: center; gap: 0.7rem;
+      font-size: 0.88rem;
+      color: var(--text-secondary);
+    }
+    .vote-adv i { color: var(--gold); font-size: 0.8rem; }
+
+    @media (max-width: 1024px) {
+      .vote-steps-wrap { grid-template-columns: 1fr; }
+    }
+
+    /* =========================================
+       PARTNERS & CONTACT SECTION
+    ========================================= */
+    #partners {
+      padding: 7rem 2rem;
+      background: var(--bg-secondary);
+    }
+    .partners-header {
+      text-align: center;
+      margin-bottom: 4rem;
+    }
+    .partners-grid {
+      max-width: 900px; margin: 0 auto 4rem;
+      display: flex; flex-wrap: wrap;
+      gap: 1.5rem;
+      justify-content: center;
+    }
+    .partner-logo {
+      padding: 1.2rem 2.5rem;
+      background: var(--bg-glass);
+      border: 1px solid var(--border-gold);
+      border-radius: 2px;
+      display: flex; align-items: center; gap: 0.8rem;
+      font-family: 'Playfair Display', serif;
+      font-size: 1rem;
+      font-weight: 700;
+      color: var(--text-secondary);
+      transition: all 0.3s;
+      cursor: default;
+    }
+    .partner-logo i { color: var(--gold); }
+    .partner-logo:hover {
+      border-color: var(--gold);
+      color: var(--text-primary);
+      transform: translateY(-4px);
+      box-shadow: var(--shadow-gold);
+    }
+
+    /* Contact CTA */
+    .contact-cta-box {
+      max-width: 700px; margin: 0 auto;
+      text-align: center;
+      padding: 4rem 3rem;
+      background: var(--gradient-card);
+      border: 1px solid var(--border-gold);
+      border-radius: 2px;
+      position: relative;
+      overflow: hidden;
+    }
+    .contact-cta-box::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0; height: 2px;
+      background: var(--gradient-gold);
+    }
+    .contact-email {
+      display: inline-flex; align-items: center; gap: 0.6rem;
+      margin-top: 1.5rem;
+      font-size: 1.1rem;
+      color: var(--gold);
+      text-decoration: none;
+      border-bottom: 1px solid var(--border-gold);
+      padding-bottom: 2px;
+      transition: all 0.3s;
+    }
+    .contact-email:hover {
+      color: var(--gold-light);
+      border-color: var(--gold);
+    }
+
+    /* =========================================
+       FOOTER
+    ========================================= */
+    footer {
+      background: var(--bg-primary);
+      border-top: 1px solid var(--border-gold);
+      padding: 4rem 2rem 2rem;
+    }
+    .footer-inner {
+      max-width: 1200px; margin: 0 auto;
+      display: grid;
+      grid-template-columns: 2fr 1fr 1fr 1fr;
+      gap: 3rem;
+      margin-bottom: 3rem;
+    }
+    .footer-brand h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.5rem;
+      font-weight: 900;
+      background: var(--gradient-gold);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      margin-bottom: 1rem;
+    }
+    .footer-brand p {
+      font-size: 0.88rem;
+      color: var(--text-muted);
+      line-height: 1.7;
+      max-width: 300px;
+    }
+    .footer-social {
+      display: flex; gap: 0.8rem; margin-top: 1.5rem;
+    }
+    .social-btn {
+      width: 36px; height: 36px;
+      background: var(--bg-glass);
+      border: 1px solid var(--border-gold);
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      color: var(--gold);
+      font-size: 0.85rem;
+      text-decoration: none;
+      transition: all 0.3s;
+    }
+    .social-btn:hover {
+      background: var(--gradient-gold);
+      color: #090810;
+      border-color: var(--gold);
+      transform: translateY(-3px);
+      box-shadow: var(--shadow-gold);
+    }
+    .footer-col h4 {
+      font-family: 'Playfair Display', serif;
+      font-size: 1rem;
+      font-weight: 600;
+      margin-bottom: 1.2rem;
+      color: var(--gold);
+    }
+    .footer-col ul { list-style: none; }
+    .footer-col ul li {
+      margin-bottom: 0.6rem;
+    }
+    .footer-col ul li a {
+      color: var(--text-muted);
+      text-decoration: none;
+      font-size: 0.88rem;
+      transition: color 0.3s;
+    }
+    .footer-col ul li a:hover { color: var(--gold); }
+    .footer-bottom {
+      max-width: 1200px; margin: 0 auto;
+      padding-top: 2rem;
+      border-top: 1px solid var(--border-gold);
+      display: flex; justify-content: space-between; align-items: center;
+      flex-wrap: wrap; gap: 1rem;
+    }
+    .footer-bottom p {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+    }
+    .footer-bottom a {
+      color: var(--gold);
+      text-decoration: none;
+    }
+
+    @media (max-width: 1024px) {
+      .footer-inner { grid-template-columns: 1fr 1fr; }
+    }
+    @media (max-width: 640px) {
+      .footer-inner { grid-template-columns: 1fr; }
+    }
+
+    /* =========================================
+       TOAST / NOTIFICATION
+    ========================================= */
+    #toast {
+      position: fixed;
+      bottom: 2rem; right: 2rem;
+      background: var(--bg-glass-heavy);
+      backdrop-filter: blur(20px);
+      border: 1px solid var(--border-gold-bright);
+      border-radius: 4px;
+      padding: 1rem 1.5rem;
+      color: var(--text-primary);
+      font-size: 0.9rem;
+      font-weight: 500;
+      z-index: 9000;
+      transform: translateX(120%);
+      transition: transform 0.5s cubic-bezier(0.16,1,0.3,1);
+      max-width: 340px;
+      display: flex; align-items: center; gap: 0.7rem;
+    }
+    #toast.show { transform: translateX(0); }
+    #toast i { color: var(--gold); font-size: 1.1rem; }
+
+    /* =========================================
+       SCROLL TO TOP
+    ========================================= */
+    #scroll-top {
+      position: fixed;
+      bottom: 2rem; left: 2rem;
+      width: 44px; height: 44px;
+      background: var(--gradient-gold);
+      border: none; border-radius: 50%;
+      color: #090810;
+      font-size: 1rem;
+      cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      transition: all 0.4s;
+      opacity: 0;
+      transform: translateY(20px);
+      z-index: 999;
+    }
+    #scroll-top.visible { opacity: 1; transform: translateY(0); }
+    #scroll-top:hover { transform: translateY(-4px); box-shadow: var(--shadow-gold); }
+  </style>
+</head>
+<body>
+
+<!-- ===================== PAGE LOADER ===================== -->
+<div id="page-loader" aria-hidden="true">
+  <div class="loader-logo">DIGIT'S CRÉA AWARDS</div>
+  <div class="loader-bar"><div class="loader-fill"></div></div>
+</div>
+
+<!-- ===================== CANVAS PARTICLES ===================== -->
+<canvas id="particles-canvas" aria-hidden="true"></canvas>
+
+<!-- ===================== NAVIGATION ===================== -->
+<nav id="navbar" role="navigation" aria-label="Navigation principale">
+  <a href="#hero" class="nav-logo">DIGIT'S <span>CRÉA</span> AWARDS</a>
+  <ul class="nav-links" role="list">
+    <li><a href="#about">À propos</a></li>
+    <li><a href="#categories">Catégories</a></li>
+    <li><a href="#nominees">Nominés</a></li>
+    <li><a href="#how-to-vote">Voter</a></li>
+    <li><a href="#partners">Contact</a></li>
+  </ul>
+  <div class="nav-right">
+    <button class="btn-nav" onclick="handleRegister()" aria-label="S'inscrire au concours">S'inscrire</button>
+    <button class="theme-toggle" id="theme-toggle" aria-label="Changer le thème">
+      <i class="fas fa-moon" id="theme-icon"></i>
+    </button>
+    <div class="burger" id="burger" aria-label="Ouvrir le menu" role="button" tabindex="0">
+      <span></span><span></span><span></span>
+    </div>
+  </div>
+</nav>
+
+<!-- Mobile Menu -->
+<div class="mobile-menu" id="mobile-menu" role="dialog" aria-modal="true" aria-label="Menu mobile">
+  <button class="mobile-close" id="mobile-close" aria-label="Fermer le menu"><i class="fas fa-times"></i></button>
+  <a href="#about" class="mobile-link">À propos</a>
+  <a href="#categories" class="mobile-link">Catégories</a>
+  <a href="#nominees" class="mobile-link">Nominés</a>
+  <a href="#how-to-vote" class="mobile-link">Comment voter</a>
+  <a href="#partners" class="mobile-link">Contact</a>
+  <button class="btn-primary" onclick="handleRegister()">S'inscrire maintenant</button>
+</div>
+
+<!-- ===================== HERO SECTION ===================== -->
+<section id="hero" aria-label="Accueil">
+  <div class="hero-inner">
+    <!-- Left content -->
+    <div class="hero-content">
+      <div class="hero-badge reveal">
+        <i class="fas fa-star"></i>
+        Bénin · Édition 2026 · AndroCréa
+      </div>
+      <div class="hero-edition reveal reveal-delay-1">1ère Édition</div>
+      <h1 class="hero-title reveal reveal-delay-1">
+        <span class="line-italic">Le Grand Concours des</span>
+        <span class="line-gold">Créateurs<br>Digitaux</span>
+        <span class="line-italic" style="font-size:0.55em; margin-top:0.3rem;">du Bénin</span>
+      </h1>
+      <p class="hero-desc reveal reveal-delay-2">
+        Inscrivez-vous, soumettez vos œuvres et laissez le public voter pour vos créateurs préférés. Le public vote – le jury départage. L'excellence mérite d'être reconnue.
+      </p>
+      <div class="hero-ctas reveal reveal-delay-3">
+        <button class="btn-primary" onclick="handleVote('hero')">
+          <i class="fas fa-trophy"></i> Voter maintenant
+        </button>
+        <button class="btn-secondary" onclick="handleRegister()">
+          <i class="fas fa-pen-fancy"></i> S'inscrire
+        </button>
+      </div>
+      <!-- Countdown -->
+      <div class="hero-countdown reveal reveal-delay-4">
+        <span class="countdown-label">Fin des votes dans</span>
+        <div class="countdown-units">
+          <div class="countdown-unit">
+            <span class="countdown-num" id="cd-days">20</span>
+            <span class="countdown-lbl">jours</span>
+          </div>
+          <div class="countdown-unit">
+            <span class="countdown-num" id="cd-hours">00</span>
+            <span class="countdown-lbl">heures</span>
+          </div>
+          <div class="countdown-unit">
+            <span class="countdown-num" id="cd-mins">00</span>
+            <span class="countdown-lbl">min</span>
+          </div>
+          <div class="countdown-unit">
+            <span class="countdown-num" id="cd-secs">00</span>
+            <span class="countdown-lbl">sec</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Right visual -->
+    <div class="hero-visual" aria-hidden="true">
+      <!-- Floating pills -->
+      <div style="position:absolute; top:15%; left:-30px;">
+        <div class="stat-pill" style="background:var(--bg-glass-heavy);backdrop-filter:blur(20px);border:1px solid var(--border-gold);border-radius:100px;padding:0.6rem 1.2rem;display:flex;align-items:center;gap:0.7rem;font-size:0.82rem;font-weight:600;white-space:nowrap;">
+          <i class="fas fa-users" style="color:var(--gold)"></i>
+          <span class="val" style="color:var(--gold);">1 248</span>
+          <span style="color:var(--text-secondary)">Inscrits</span>
+        </div>
+      </div>
+      <div style="position:absolute; bottom:20%; right:-30px;">
+        <div class="stat-pill" style="background:var(--bg-glass-heavy);backdrop-filter:blur(20px);border:1px solid var(--border-gold);border-radius:100px;padding:0.6rem 1.2rem;display:flex;align-items:center;gap:0.7rem;font-size:0.82rem;font-weight:600;white-space:nowrap;">
+          <i class="fas fa-heart" style="color:var(--gold)"></i>
+          <span class="val" style="color:var(--gold);">3 561</span>
+          <span style="color:var(--text-secondary)">Votes</span>
+        </div>
+      </div>
+      <!-- Trophy -->
+      <div class="hero-trophy">
+        <i class="fas fa-trophy trophy-icon" aria-hidden="true"></i>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== ABOUT SECTION ===================== -->
+<section id="about" aria-label="À propos du concours">
+  <div class="about-inner container">
+    <div class="about-image-wrap reveal from-left">
+      <div class="about-image-box">
+        <img
+          src="https://images.unsplash.com/photo-1531482615713-2afd69097998?w=600&q=80"
+          alt="Créateurs digitaux béninois au travail"
+          loading="lazy"
+        />
+      </div>
+      <div class="about-tag-float">
+        <div style="font-size:1.8rem">🏆</div>
+        <div>1ère<br>Édition</div>
+      </div>
+    </div>
+    <div class="about-text reveal from-right">
+      <span class="section-tag">À propos</span>
+      <h2 class="section-title">
+        Révéler l'excellence<br><em>créative du Bénin</em>
+      </h2>
+      <div class="divider-gold"></div>
+      <p class="section-subtitle">
+        Digit's Créa Awards est un concours national de créativité numérique initié par AndroCréa pour révéler, structurer et valoriser les talents béninois dans les domaines du design graphique, de la vidéo, du web et de la communication digitale.
+      </p>
+      <div class="about-points">
+        <div class="about-point">
+          <div class="about-point-icon"><i class="fas fa-star" aria-hidden="true"></i></div>
+          <div class="about-point-text">
+            <strong>Excellence & Innovation</strong>
+            <p>Identifier et valoriser les meilleurs créateurs digitaux sur des critères professionnels rigoureux.</p>
+          </div>
+        </div>
+        <div class="about-point">
+          <div class="about-point-icon"><i class="fas fa-network-wired" aria-hidden="true"></i></div>
+          <div class="about-point-text">
+            <strong>Réseau & Opportunités</strong>
+            <p>Créer des passerelles concrètes vers la formation, l'emploi et les missions professionnelles.</p>
+          </div>
+        </div>
+        <div class="about-point">
+          <div class="about-point-icon"><i class="fas fa-globe-africa" aria-hidden="true"></i></div>
+          <div class="about-point-text">
+            <strong>Vision Régionale</strong>
+            <p>Faire du Bénin un vivier reconnu de talents créatifs digitaux compétitifs à l'échelle africaine.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== CATEGORIES SECTION ===================== -->
+<section id="categories" aria-label="Catégories du concours">
+  <div class="container">
+    <div class="categories-header">
+      <span class="section-tag reveal">5 Domaines de compétition</span>
+      <h2 class="section-title reveal reveal-delay-1">Nos <em>Catégories</em></h2>
+      <div class="divider-gold divider-center reveal reveal-delay-2"></div>
+      <p class="section-subtitle reveal reveal-delay-2" style="margin:0 auto;text-align:center;">
+        Chaque candidat concourt dans un seul domaine principal. Une approche claire pour une compétition équitable et crédible.
+      </p>
+    </div>
+    <div class="categories-grid">
+      <div class="cat-card reveal reveal-delay-1" style="--delay:0.1s">
+        <i class="fas fa-paint-brush cat-icon" aria-hidden="true"></i>
+        <div class="cat-name">Design Graphique</div>
+        <div class="cat-count">4 sous-catégories</div>
+      </div>
+      <div class="cat-card reveal reveal-delay-2" style="--delay:0.2s">
+        <i class="fas fa-video cat-icon" aria-hidden="true"></i>
+        <div class="cat-name">Vidéo & Audiovisuel</div>
+        <div class="cat-count">2 sous-catégories</div>
+      </div>
+      <div class="cat-card reveal reveal-delay-3" style="--delay:0.3s">
+        <i class="fas fa-code cat-icon" aria-hidden="true"></i>
+        <div class="cat-name">Web & Digital</div>
+        <div class="cat-count">3 sous-catégories</div>
+      </div>
+      <div class="cat-card reveal reveal-delay-4" style="--delay:0.4s">
+        <i class="fas fa-bullhorn cat-icon" aria-hidden="true"></i>
+        <div class="cat-name">Communication & Marketing</div>
+        <div class="cat-count">2 sous-catégories</div>
+      </div>
+      <div class="cat-card reveal reveal-delay-5" style="--delay:0.5s">
+        <i class="fas fa-mobile-alt cat-icon" aria-hidden="true"></i>
+        <div class="cat-name">Créativité Mobile</div>
+        <div class="cat-count">2 sous-catégories</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== NOMINEES SECTION ===================== -->
+<section id="nominees" aria-label="Candidats nominés">
+  <div class="container" style="max-width:1200px">
+    <div class="nominees-header reveal">
+      <span class="section-tag">Candidats officiels</span>
+      <h2 class="section-title">Les <em>Nominés</em> 2026</h2>
+      <div class="divider-gold divider-center"></div>
+      <p class="section-subtitle" style="margin:0 auto;text-align:center;">
+        Votez pour vos créateurs préférés. Chaque vote est lié à une transaction sécurisée. Le jury départage les finalistes.
+      </p>
+    </div>
+  </div>
+  <div class="nominees-grid" style="max-width:1200px;margin:0 auto;padding:0 2rem;">
+    <!-- Nominee 1 -->
+    <article class="nominee-card reveal from-left" aria-label="Nominé Koffi Mensah">
+      <div class="nominee-photo-wrap">
+        <img class="nominee-photo"
+          src="https://images.unsplash.com/photo-1531746020798-e6953c6e8e04?w=500&q=80"
+          alt="Photo de Koffi Mensah, designer graphique nominé" loading="lazy"/>
+        <div class="nominee-photo-overlay"></div>
+        <div class="nominee-votes-badge"><i class="fas fa-fire"></i> 487 votes</div>
+      </div>
+      <div class="nominee-body">
+        <div class="nominee-cat">Design Graphique</div>
+        <div class="nominee-name">Koffi Mensah</div>
+        <p class="nominee-desc">Designer passionné spécialisé en identité visuelle et branding pour les startups africaines.</p>
+        <div class="nominee-progress-wrap">
+          <div class="nominee-progress-label"><span>Score public</span><span>78%</span></div>
+          <div class="nominee-progress-bar">
+            <div class="nominee-progress-fill" style="--w:78%"></div>
+          </div>
+        </div>
+        <button class="btn-vote" onclick="handleVote('Koffi Mensah')"><span><i class="fas fa-heart"></i> Voter pour ce créateur</span></button>
+      </div>
+    </article>
+    <!-- Nominee 2 -->
+    <article class="nominee-card reveal" aria-label="Nominée Aïssatou Diallo">
+      <div class="nominee-photo-wrap">
+        <img class="nominee-photo"
+          src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=500&q=80"
+          alt="Photo d'Aïssatou Diallo, vidéaste nominée" loading="lazy"/>
+        <div class="nominee-photo-overlay"></div>
+        <div class="nominee-votes-badge"><i class="fas fa-fire"></i> 612 votes</div>
+      </div>
+      <div class="nominee-body">
+        <div class="nominee-cat">Vidéo & Audiovisuel</div>
+        <div class="nominee-name">Aïssatou Diallo</div>
+        <p class="nominee-desc">Vidéaste & réalisatrice aux récits visuels puissants, lauréate de plusieurs compétitions régionales.</p>
+        <div class="nominee-progress-wrap">
+          <div class="nominee-progress-label"><span>Score public</span><span>92%</span></div>
+          <div class="nominee-progress-bar">
+            <div class="nominee-progress-fill" style="--w:92%"></div>
+          </div>
+        </div>
+        <button class="btn-vote" onclick="handleVote('Aïssatou Diallo')"><span><i class="fas fa-heart"></i> Voter pour ce créateur</span></button>
+      </div>
+    </article>
+    <!-- Nominee 3 -->
+    <article class="nominee-card reveal from-right" aria-label="Nominé Rodrigue Agossou">
+      <div class="nominee-photo-wrap">
+        <img class="nominee-photo"
+          src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=500&q=80"
+          alt="Photo de Rodrigue Agossou, développeur web nominé" loading="lazy"/>
+        <div class="nominee-photo-overlay"></div>
+        <div class="nominee-votes-badge"><i class="fas fa-fire"></i> 344 votes</div>
+      </div>
+      <div class="nominee-body">
+        <div class="nominee-cat">Web & Digital</div>
+        <div class="nominee-name">Rodrigue Agossou</div>
+        <p class="nominee-desc">Développeur full-stack créateur de plateformes web innovantes au service des entreprises béninoises.</p>
+        <div class="nominee-progress-wrap">
+          <div class="nominee-progress-label"><span>Score public</span><span>61%</span></div>
+          <div class="nominee-progress-bar">
+            <div class="nominee-progress-fill" style="--w:61%"></div>
+          </div>
+        </div>
+        <button class="btn-vote" onclick="handleVote('Rodrigue Agossou')"><span><i class="fas fa-heart"></i> Voter pour ce créateur</span></button>
+      </div>
+    </article>
+    <!-- Nominee 4 -->
+    <article class="nominee-card reveal from-left" aria-label="Nominée Fatoumata Sow">
+      <div class="nominee-photo-wrap">
+        <img class="nominee-photo"
+          src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=500&q=80"
+          alt="Photo de Fatoumata Sow, community manager nominée" loading="lazy"/>
+        <div class="nominee-photo-overlay"></div>
+        <div class="nominee-votes-badge"><i class="fas fa-fire"></i> 521 votes</div>
+      </div>
+      <div class="nominee-body">
+        <div class="nominee-cat">Com. & Marketing Digital</div>
+        <div class="nominee-name">Fatoumata Sow</div>
+        <p class="nominee-desc">Stratégiste digitale experte en croissance de communautés et campagnes à fort impact sur réseaux sociaux.</p>
+        <div class="nominee-progress-wrap">
+          <div class="nominee-progress-label"><span>Score public</span><span>85%</span></div>
+          <div class="nominee-progress-bar">
+            <div class="nominee-progress-fill" style="--w:85%"></div>
+          </div>
+        </div>
+        <button class="btn-vote" onclick="handleVote('Fatoumata Sow')"><span><i class="fas fa-heart"></i> Voter pour ce créateur</span></button>
+      </div>
+    </article>
+    <!-- Nominee 5 -->
+    <article class="nominee-card reveal" aria-label="Nominé Seun Adeyemi">
+      <div class="nominee-photo-wrap">
+        <img class="nominee-photo"
+          src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=500&q=80"
+          alt="Photo de Seun Adeyemi, créateur mobile nominé" loading="lazy"/>
+        <div class="nominee-photo-overlay"></div>
+        <div class="nominee-votes-badge"><i class="fas fa-fire"></i> 289 votes</div>
+      </div>
+      <div class="nominee-body">
+        <div class="nominee-cat">Créativité Digitale Mobile</div>
+        <div class="nominee-name">Seun Adeyemi</div>
+        <p class="nominee-desc">Créateur 100% mobile, maître du design et du montage vidéo réalisés uniquement sur smartphone.</p>
+        <div class="nominee-progress-wrap">
+          <div class="nominee-progress-label"><span>Score public</span><span>54%</span></div>
+          <div class="nominee-progress-bar">
+            <div class="nominee-progress-fill" style="--w:54%"></div>
+          </div>
+        </div>
+        <button class="btn-vote" onclick="handleVote('Seun Adeyemi')"><span><i class="fas fa-heart"></i> Voter pour ce créateur</span></button>
+      </div>
+    </article>
+    <!-- Nominee 6 -->
+    <article class="nominee-card reveal from-right" aria-label="Nominée Délali Houngbadji">
+      <div class="nominee-photo-wrap">
+        <img class="nominee-photo"
+          src="https://images.unsplash.com/photo-1551836022-deb4988cc6c0?w=500&q=80"
+          alt="Photo de Délali Houngbadji, designer UX/UI nominée" loading="lazy"/>
+        <div class="nominee-photo-overlay"></div>
+        <div class="nominee-votes-badge"><i class="fas fa-fire"></i> 403 votes</div>
+      </div>
+      <div class="nominee-body">
+        <div class="nominee-cat">Web & Digital · UX/UI</div>
+        <div class="nominee-name">Délali Houngbadji</div>
+        <p class="nominee-desc">Designer UX/UI avec une approche centrée utilisateur pour créer des interfaces élégantes et intuitives.</p>
+        <div class="nominee-progress-wrap">
+          <div class="nominee-progress-label"><span>Score public</span><span>70%</span></div>
+          <div class="nominee-progress-bar">
+            <div class="nominee-progress-fill" style="--w:70%"></div>
+          </div>
+        </div>
+        <button class="btn-vote" onclick="handleVote('Délali Houngbadji')"><span><i class="fas fa-heart"></i> Voter pour ce créateur</span></button>
+      </div>
+    </article>
+  </div>
+</section>
+
+<!-- ===================== STATS SECTION ===================== -->
+<section id="stats" aria-label="Chiffres clés">
+  <div class="stats-inner">
+    <div class="stat-card reveal reveal-delay-1">
+      <div class="stat-icon"><i class="fas fa-users" aria-hidden="true"></i></div>
+      <div class="stat-number" data-target="1248" id="stat-0">0</div>
+      <div class="stat-label">Candidats Inscrits</div>
+    </div>
+    <div class="stat-card reveal reveal-delay-2">
+      <div class="stat-icon"><i class="fas fa-vote-yea" aria-hidden="true"></i></div>
+      <div class="stat-number" data-target="3561" id="stat-1">0</div>
+      <div class="stat-label">Votes Enregistrés</div>
+    </div>
+    <div class="stat-card reveal reveal-delay-3">
+      <div class="stat-icon"><i class="fas fa-medal" aria-hidden="true"></i></div>
+      <div class="stat-number" data-target="42" id="stat-2">0</div>
+      <div class="stat-label">Nominés Officiels</div>
+    </div>
+    <div class="stat-card reveal reveal-delay-4">
+      <div class="stat-icon"><i class="fas fa-clock" aria-hidden="true"></i></div>
+      <div class="stat-number" data-target="20" id="stat-3">0</div>
+      <div class="stat-label">Jours Restants</div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== HOW TO VOTE SECTION ===================== -->
+<section id="how-to-vote" aria-label="Comment voter">
+  <div class="container" style="max-width:1200px;">
+    <div class="vote-header">
+      <span class="section-tag reveal">Participer</span>
+      <h2 class="section-title reveal reveal-delay-1">Comment <em>Voter</em></h2>
+      <div class="divider-gold divider-center reveal reveal-delay-2"></div>
+    </div>
+    <div class="vote-steps-wrap">
+      <div class="vote-steps">
+        <div class="vote-step reveal from-left">
+          <div class="step-number">01</div>
+          <div class="step-content">
+            <h4>Choisissez un nominé</h4>
+            <p>Parcourez les profils et projets des candidats nominés dans votre catégorie préférée. Découvrez leurs œuvres et laissez-vous inspirer.</p>
+          </div>
+        </div>
+        <div class="vote-step reveal from-left reveal-delay-1">
+          <div class="step-number">02</div>
+          <div class="step-content">
+            <h4>Cliquez sur "Voter"</h4>
+            <p>Appuyez sur le bouton voter sur la fiche du candidat que vous souhaitez soutenir. Vous pouvez voter pour plusieurs candidats dans des catégories différentes.</p>
+          </div>
+        </div>
+        <div class="vote-step reveal from-left reveal-delay-2">
+          <div class="step-number">03</div>
+          <div class="step-content">
+            <h4>Effectuez votre paiement</h4>
+            <p>Sélectionnez votre moyen de paiement (MTN Mobile Money, Moov Money, carte bancaire). Chaque vote est lié à une transaction sécurisée et traçable.</p>
+          </div>
+        </div>
+        <div class="vote-step reveal from-left reveal-delay-3">
+          <div class="step-number">04</div>
+          <div class="step-content">
+            <h4>Confirmation & reçu</h4>
+            <p>Après confirmation du paiement, votre vote est comptabilisé. Vous recevez un reçu de confirmation par SMS/email. Le vote est instantané et sécurisé.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Payment options -->
+      <div class="payment-section reveal from-right">
+        <h3>Moyens de <em style="color:var(--gold);font-style:italic;">paiement</em></h3>
+        <div class="payment-methods">
+          <div class="payment-method">
+            <i class="fas fa-mobile-alt" aria-hidden="true"></i>
+            MTN MoMo
+          </div>
+          <div class="payment-method">
+            <i class="fas fa-phone" aria-hidden="true"></i>
+            Moov Money
+          </div>
+          <div class="payment-method">
+            <i class="fas fa-credit-card" aria-hidden="true"></i>
+            Carte Bancaire
+          </div>
+        </div>
+        <div class="vote-advantages">
+          <div class="vote-adv"><i class="fas fa-check-circle"></i> Vote instantané après confirmation du paiement</div>
+          <div class="vote-adv"><i class="fas fa-check-circle"></i> Reçu de confirmation envoyé par SMS et email</div>
+          <div class="vote-adv"><i class="fas fa-check-circle"></i> Système antifraude : un vote par transaction</div>
+          <div class="vote-adv"><i class="fas fa-check-circle"></i> Transactions sécurisées et cryptées</div>
+          <div class="vote-adv"><i class="fas fa-check-circle"></i> Disponible 24h/24 depuis votre smartphone</div>
+          <div class="vote-adv"><i class="fas fa-check-circle"></i> Votes limités par numéro pour plus d'équité</div>
+        </div>
+        <div style="margin-top:2rem">
+          <button class="btn-primary" style="width:100%;justify-content:center;" onclick="handleVote('section')">
+            <i class="fas fa-trophy"></i> Voter maintenant
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== PARTNERS & CONTACT SECTION ===================== -->
+<section id="partners" aria-label="Partenaires et contact">
+  <div class="container" style="max-width:1200px;">
+    <div class="partners-header">
+      <span class="section-tag reveal">Écosystème</span>
+      <h2 class="section-title reveal reveal-delay-1">Nos <em>Partenaires</em></h2>
+      <div class="divider-gold divider-center reveal reveal-delay-2"></div>
+      <p class="section-subtitle reveal reveal-delay-2" style="margin:0 auto;text-align:center;">
+        Digit's Créa Awards est soutenu par des acteurs clés de l'écosystème numérique et entrepreneurial béninois.
+      </p>
+    </div>
+
+    <div class="partners-grid">
+      <div class="partner-logo reveal reveal-delay-1"><i class="fas fa-broadcast-tower"></i> BéninTV Numérique</div>
+      <div class="partner-logo reveal reveal-delay-2"><i class="fas fa-university"></i> UAC Bénin</div>
+      <div class="partner-logo reveal reveal-delay-3"><i class="fas fa-sim-card"></i> MTN Bénin</div>
+      <div class="partner-logo reveal reveal-delay-4"><i class="fas fa-building"></i> CCIB</div>
+      <div class="partner-logo reveal reveal-delay-1"><i class="fas fa-laptop-code"></i> TechHub Cotonou</div>
+      <div class="partner-logo reveal reveal-delay-2"><i class="fas fa-newspaper"></i> La Nation</div>
+      <div class="partner-logo reveal reveal-delay-3"><i class="fas fa-palette"></i> Créa Africa</div>
+    </div>
+
+    <!-- Contact CTA -->
+    <div class="contact-cta-box reveal">
+      <span class="section-tag">Contact</span>
+      <h2 class="section-title" style="margin-top:1rem">Rejoignez <em>l'aventure</em></h2>
+      <p style="color:var(--text-secondary);font-size:1rem;line-height:1.8;margin-top:1rem;">
+        Pour toute question de partenariat, d'inscription ou d'information sur le concours, contactez l'équipe AndroCréa.
+      </p>
+      <a href="mailto:androcrea03@gmail.com" class="contact-email">
+        <i class="fas fa-envelope"></i> androcrea03@gmail.com
+      </a>
+      <div style="margin-top:1rem;font-size:0.88rem;color:var(--text-muted)">
+        <i class="fas fa-phone"></i> +229 01 47 17 15 09 &nbsp;|&nbsp; +229 01 45 82 91 17
+      </div>
+      <div style="margin-top:2rem; display:flex; gap:1rem; justify-content:center; flex-wrap:wrap;">
+        <button class="btn-primary" onclick="handleRegister()"><i class="fas fa-pen-fancy"></i> S'inscrire au concours</button>
+        <button class="btn-secondary" onclick="handleVote('cta')"><i class="fas fa-heart"></i> Voter maintenant</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== FOOTER ===================== -->
+<footer role="contentinfo">
+  <div class="footer-inner">
+    <div class="footer-brand">
+      <h2>DIGIT'S CRÉA AWARDS</h2>
+      <p>Le Grand Concours des Créateurs Digitaux du Bénin. Une initiative AndroCréa pour révéler, structurer et valoriser les talents numériques béninois.</p>
+      <div class="footer-social">
+        <a href="#" class="social-btn" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
+        <a href="#" class="social-btn" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+        <a href="#" class="social-btn" aria-label="TikTok"><i class="fab fa-tiktok"></i></a>
+        <a href="#" class="social-btn" aria-label="WhatsApp"><i class="fab fa-whatsapp"></i></a>
+      </div>
+    </div>
+    <div class="footer-col">
+      <h4>Navigation</h4>
+      <ul>
+        <li><a href="#about">À propos</a></li>
+        <li><a href="#categories">Catégories</a></li>
+        <li><a href="#nominees">Nominés</a></li>
+        <li><a href="#how-to-vote">Comment voter</a></li>
+        <li><a href="#partners">Partenaires</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Concours</h4>
+      <ul>
+        <li><a href="#" onclick="handleRegister();return false;">S'inscrire</a></li>
+        <li><a href="#nominees" onclick="handleVote('footer');return false;">Voter</a></li>
+        <li><a href="#">Règlement officiel</a></li>
+        <li><a href="#">Critères d'évaluation</a></li>
+        <li><a href="#">Calendrier</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>AndroCréa</h4>
+      <ul>
+        <li><a href="#">Site officiel</a></li>
+        <li><a href="#">Formation digitale</a></li>
+        <li><a href="#">Portfolio</a></li>
+        <li><a href="mailto:androcrea03@gmail.com">Contact</a></li>
+        <li><a href="#">Mentions légales</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <p>&copy; 2026 <a href="#">AndroCréa</a> · RCCM N° RB/LKS/25 A 10521 · Tous droits réservés</p>
+    <p>Digit's Créa Awards – 1ère Édition · Bénin</p>
+  </div>
+</footer>
+
+<!-- ===================== TOAST ===================== -->
+<div id="toast" role="alert" aria-live="polite">
+  <i class="fas fa-trophy"></i>
+  <span id="toast-msg">Redirection vers la plateforme de paiement...</span>
+</div>
+
+<!-- ===================== SCROLL TO TOP ===================== -->
+<button id="scroll-top" onclick="window.scrollTo({top:0,behavior:'smooth'})" aria-label="Retour en haut">
+  <i class="fas fa-chevron-up"></i>
+</button>
+
+<!-- ===================== JAVASCRIPT ===================== -->
+<script>
+  /* ===========================================================
+     THEME TOGGLE
+  =========================================================== */
+  const html = document.documentElement;
+  const themeToggle = document.getElementById('theme-toggle');
+  const themeIcon = document.getElementById('theme-icon');
+
+  // Load saved theme
+  const savedTheme = localStorage.getItem('dca-theme') || 'dark';
+  html.setAttribute('data-theme', savedTheme);
+  updateThemeIcon(savedTheme);
+
+  themeToggle.addEventListener('click', () => {
+    const current = html.getAttribute('data-theme');
+    const next = current === 'dark' ? 'light' : 'dark';
+    html.setAttribute('data-theme', next);
+    localStorage.setItem('dca-theme', next);
+    updateThemeIcon(next);
+  });
+
+  function updateThemeIcon(theme) {
+    themeIcon.className = theme === 'dark' ? 'fas fa-sun' : 'fas fa-moon';
+  }
+
+  /* ===========================================================
+     PAGE LOADER
+  =========================================================== */
+  window.addEventListener('load', () => {
+    setTimeout(() => {
+      document.getElementById('page-loader').classList.add('hidden');
+    }, 2000);
+  });
+
+  /* ===========================================================
+     MOBILE MENU
+  =========================================================== */
+  const burger = document.getElementById('burger');
+  const mobileMenu = document.getElementById('mobile-menu');
+  const mobileClose = document.getElementById('mobile-close');
+
+  burger.addEventListener('click', () => { mobileMenu.classList.add('open'); });
+  mobileClose.addEventListener('click', () => { mobileMenu.classList.remove('open'); });
+  burger.addEventListener('keydown', (e) => { if (e.key==='Enter') mobileMenu.classList.add('open'); });
+
+  // Close on link click
+  document.querySelectorAll('.mobile-link').forEach(link => {
+    link.addEventListener('click', () => { mobileMenu.classList.remove('open'); });
+  });
+
+  /* ===========================================================
+     NAVBAR SCROLL SHRINK
+  =========================================================== */
+  const navbar = document.getElementById('navbar');
+  const scrollTopBtn = document.getElementById('scroll-top');
+
+  window.addEventListener('scroll', () => {
+    if (window.scrollY > 80) {
+      navbar.classList.add('scrolled');
+      scrollTopBtn.classList.add('visible');
+    } else {
+      navbar.classList.remove('scrolled');
+      scrollTopBtn.classList.remove('visible');
+    }
+  });
+
+  /* ===========================================================
+     INTERSECTION OBSERVER – SCROLL ANIMATIONS
+  =========================================================== */
+  const revealObserver = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+        // Animate nominee progress bars
+        entry.target.querySelectorAll('.nominee-progress-fill').forEach(bar => {
+          bar.classList.add('animated');
+        });
+        revealObserver.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.15, rootMargin: '0px 0px -50px 0px' });
+
+  document.querySelectorAll('.reveal').forEach(el => {
+    revealObserver.observe(el);
+  });
+
+  // Also observe nominee cards for progress bars
+  const progressObserver = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.querySelectorAll('.nominee-progress-fill').forEach(bar => {
+          bar.classList.add('animated');
+        });
+        progressObserver.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.3 });
+
+  document.querySelectorAll('.nominee-card').forEach(c => progressObserver.observe(c));
+
+  /* ===========================================================
+     ANIMATED COUNTERS
+  =========================================================== */
+  function animateCounter(el, target, duration = 2000) {
+    let start = 0;
+    const startTime = performance.now();
+    function step(now) {
+      const elapsed = now - startTime;
+      const progress = Math.min(elapsed / duration, 1);
+      // Ease out cubic
+      const ease = 1 - Math.pow(1 - progress, 3);
+      start = Math.floor(ease * target);
+      el.textContent = start.toLocaleString('fr-FR');
+      if (progress < 1) requestAnimationFrame(step);
+      else el.textContent = target.toLocaleString('fr-FR');
+    }
+    requestAnimationFrame(step);
+  }
+
+  const statsSection = document.getElementById('stats');
+  let statsAnimated = false;
+  const statsObserver = new IntersectionObserver((entries) => {
+    if (entries[0].isIntersecting && !statsAnimated) {
+      statsAnimated = true;
+      document.querySelectorAll('.stat-number[data-target]').forEach((el, i) => {
+        const target = parseInt(el.getAttribute('data-target'));
+        setTimeout(() => animateCounter(el, target), i * 150);
+      });
+    }
+  }, { threshold: 0.4 });
+  statsObserver.observe(statsSection);
+
+  /* ===========================================================
+     COUNTDOWN TIMER
+  =========================================================== */
+  // Set target date: 20 days from today
+  const targetDate = new Date();
+  targetDate.setDate(targetDate.getDate() + 20);
+
+  function updateCountdown() {
+    const now = new Date();
+    const diff = targetDate - now;
+    if (diff <= 0) {
+      document.getElementById('cd-days').textContent = '00';
+      document.getElementById('cd-hours').textContent = '00';
+      document.getElementById('cd-mins').textContent = '00';
+      document.getElementById('cd-secs').textContent = '00';
+      return;
+    }
+    const days  = Math.floor(diff / (1000 * 60 * 60 * 24));
+    const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+    const mins  = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+    const secs  = Math.floor((diff % (1000 * 60)) / 1000);
+
+    document.getElementById('cd-days').textContent  = String(days).padStart(2,'0');
+    document.getElementById('cd-hours').textContent = String(hours).padStart(2,'0');
+    document.getElementById('cd-mins').textContent  = String(mins).padStart(2,'0');
+    document.getElementById('cd-secs').textContent  = String(secs).padStart(2,'0');
+  }
+  updateCountdown();
+  setInterval(updateCountdown, 1000);
+
+  /* ===========================================================
+     TOAST NOTIFICATION
+  =========================================================== */
+  function showToast(msg) {
+    const toast = document.getElementById('toast');
+    const toastMsg = document.getElementById('toast-msg');
+    toastMsg.textContent = msg;
+    toast.classList.add('show');
+    setTimeout(() => toast.classList.remove('show'), 4000);
+  }
+
+  /* ===========================================================
+     INTERACTIVE HANDLERS
+  =========================================================== */
+  function handleVote(name) {
+    if (name === 'hero' || name === 'section' || name === 'cta' || name === 'footer') {
+      showToast('🏆 Redirection vers la plateforme de vote et paiement...');
+    } else {
+      showToast(`❤️ Vote pour ${name} — Redirection vers la plateforme de paiement...`);
+    }
+  }
+
+  function handleRegister() {
+    showToast('✨ Redirection vers le formulaire d\'inscription au concours...');
+  }
+
+  /* ===========================================================
+     CANVAS PARTICLES
+  =========================================================== */
+  (function() {
+    const canvas = document.getElementById('particles-canvas');
+    const ctx = canvas.getContext('2d');
+    let W, H, particles, animId;
+
+    function resize() {
+      W = canvas.width = window.innerWidth;
+      H = canvas.height = window.innerHeight;
+    }
+
+    function isDark() {
+      return document.documentElement.getAttribute('data-theme') !== 'light';
+    }
+
+    class Particle {
+      constructor() { this.reset(); }
+      reset() {
+        this.x = Math.random() * W;
+        this.y = Math.random() * H;
+        this.size = Math.random() * 1.5 + 0.3;
+        this.speedX = (Math.random() - 0.5) * 0.3;
+        this.speedY = (Math.random() - 0.5) * 0.3;
+        this.opacity = Math.random() * 0.6 + 0.1;
+        this.life = Math.random() * 200 + 100;
+        this.age = 0;
+      }
+      update() {
+        this.x += this.speedX;
+        this.y += this.speedY;
+        this.age++;
+        if (this.age > this.life || this.x < 0 || this.x > W || this.y < 0 || this.y > H) {
+          this.reset();
+        }
+      }
+      draw() {
+        const alpha = this.opacity * (1 - this.age / this.life);
+        const dark = isDark();
+        ctx.beginPath();
+        ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+        ctx.fillStyle = dark
+          ? `rgba(212,175,55,${alpha})`
+          : `rgba(154,123,32,${alpha})`;
+        ctx.fill();
+      }
+    }
+
+    // Lines connecting close particles
+    function drawLines(pts) {
+      for (let i = 0; i < pts.length; i++) {
+        for (let j = i + 1; j < pts.length; j++) {
+          const dx = pts[i].x - pts[j].x;
+          const dy = pts[i].y - pts[j].y;
+          const dist = Math.sqrt(dx * dx + dy * dy);
+          if (dist < 120) {
+            const dark = isDark();
+            ctx.beginPath();
+            ctx.moveTo(pts[i].x, pts[i].y);
+            ctx.lineTo(pts[j].x, pts[j].y);
+            ctx.strokeStyle = dark
+              ? `rgba(212,175,55,${0.12 * (1 - dist / 120)})`
+              : `rgba(154,123,32,${0.08 * (1 - dist / 120)})`;
+            ctx.lineWidth = 0.5;
+            ctx.stroke();
+          }
+        }
+      }
+    }
+
+    function init() {
+      resize();
+      particles = Array.from({ length: 80 }, () => new Particle());
+    }
+
+    function animate() {
+      ctx.clearRect(0, 0, W, H);
+      particles.forEach(p => { p.update(); p.draw(); });
+      drawLines(particles);
+      animId = requestAnimationFrame(animate);
+    }
+
+    window.addEventListener('resize', () => { resize(); });
+    init();
+    animate();
+  })();
+</script>
+
+</body>
+</html><!DOCTYPE html>
 <html lang="fr">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Digit's Créa — L'Excellence Numérique Célébrée</title>
+<title>Digit's Créa Awards 2025 — Animations & Thème Noir/Blanc</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&family=Playfair+Display:ital,wght@0,700;0,900;1,400&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,600;0,700;1,300;1,600&family=Bebas+Neue&family=DM+Sans:wght@300;400;500;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 <style>
+/* ============================================================
+   VARIABLES & RESET (deux thèmes)
+============================================================ */
 :root {
-  --black: #050407;
-  --dark: #0C0A10;
-  --card-bg: #110F18;
-  --gold: #C9A84C;
-  --gold-bright: #F0C040;
-  --gold-pale: #E8D5A0;
-  --amber: #E07A20;
-  --cream: #F5EDDB;
-  --muted: #7A7080;
-  --border: rgba(201,168,76,0.18);
-  --glow: rgba(201,168,76,0.35);
+  --ink: #03020A;
+  --deep: #07050F;
+  --panel: #0D0A18;
+  --g1: #E8C060;
+  --g2: #C8902A;
+  --g3: #8B5A10;
+  --cream: #F2E8D0;
+  --muted: #6B6080;
+  --line: rgba(200,144,42,0.2);
+  --glow: rgba(232,192,96,0.4);
+  --transition-smooth: cubic-bezier(0.34, 1.2, 0.64, 1);
+  --transition-bounce: cubic-bezier(0.68, -0.55, 0.265, 1.55);
+  --transition-slow: cubic-bezier(0.2, 0.9, 0.4, 1.1);
 }
 
-* { margin:0; padding:0; box-sizing:border-box; }
+/* Thème noir & blanc */
+body.bw {
+  --ink: #FFFFFF;
+  --deep: #F5F5F5;
+  --panel: #EAEAEA;
+  --g1: #000000;
+  --g2: #333333;
+  --g3: #555555;
+  --cream: #111111;
+  --muted: #666666;
+  --line: rgba(0,0,0,0.15);
+  --glow: rgba(0,0,0,0.2);
+}
+body.bw .btn-gold,
+body.bw .btn-line,
+body.bw .nb-val,
+body.bw .fb,
+body.bw .nb,
+body.bw .h-title .t1,
+body.bw .h-title .t3,
+body.bw .cta-h .cl1,
+body.bw .cta-h .cl2 {
+  background: linear-gradient(135deg, #000, #333) !important;
+  -webkit-background-clip: text !important;
+  -webkit-text-fill-color: transparent !important;
+}
+body.bw .btn-gold {
+  background: #000 !important;
+  color: #fff !important;
+  -webkit-text-fill-color: #fff !important;
+}
+body.bw .btn-line {
+  border-color: #000;
+  color: #000;
+}
+body.bw .btn-line:hover {
+  background: #000;
+  color: #fff;
+}
+body.bw .h-tag,
+body.bw .s-label::before,
+body.bw .ray,
+body.bw .particle,
+body.bw .mq-item i,
+body.bw .cc-ic,
+body.bw .cd-row i,
+body.bw .ea-date,
+body.bw .sc-link {
+  color: #000 !important;
+  border-color: rgba(0,0,0,0.2) !important;
+}
+body.bw .ray {
+  background: linear-gradient(to bottom, transparent, rgba(0,0,0,0.2), rgba(0,0,0,0.5), transparent) !important;
+}
+body.bw .nb-cell:hover {
+  background: rgba(0,0,0,0.05);
+}
+body.bw .cd-b,
+body.bw .cd-row {
+  background: rgba(0,0,0,0.03);
+}
+body.bw .theme-toggle {
+  background: #000;
+  color: #fff;
+}
 
-html { scroll-behavior: smooth; }
-
+*, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+html { scroll-behavior:smooth; }
 body {
-  font-family: 'DM Sans', sans-serif;
-  background: var(--black);
-  color: var(--cream);
-  overflow-x: hidden;
-  cursor: none;
+  font-family:'DM Sans', sans-serif;
+  background:var(--ink);
+  color:var(--cream);
+  overflow-x:hidden;
+  cursor:none;
+  transition: background 0.5s ease, color 0.3s ease;
 }
 
-/* ─── CUSTOM CURSOR ─── */
-#cursor {
-  width:12px; height:12px;
-  background: var(--gold-bright);
+/* ============================================================
+   CURSOR ORIGINAL (trois couches)
+============================================================ */
+#cur, #cur2, #cur3 {
+  position:fixed;
   border-radius:50%;
-  position:fixed; top:0; left:0;
   pointer-events:none;
+  transform:translate(-50%,-50%);
+}
+#cur {
+  width:12px;
+  height:12px;
+  background:var(--g1);
+  mix-blend-mode:difference;
+  transition:transform 0.08s;
+  box-shadow:0 0 15px var(--g1);
   z-index:9999;
-  transition: transform 0.15s ease;
-  mix-blend-mode: difference;
 }
-#cursor-ring {
-  width:38px; height:38px;
-  border:1.5px solid var(--gold);
-  border-radius:50%;
-  position:fixed; top:0; left:0;
-  pointer-events:none;
+#cur2 {
+  width:40px;
+  height:40px;
+  border:2px solid var(--g1);
+  transition:all 0.3s var(--transition-smooth);
+  backdrop-filter:blur(2px);
   z-index:9998;
-  transition: all 0.35s cubic-bezier(.25,.8,.25,1);
-  opacity:0.6;
 }
-body:hover #cursor { transform: scale(1); }
-a:hover ~ #cursor, button:hover ~ #cursor { transform: scale(3); }
+#cur3 {
+  width:90px;
+  height:90px;
+  background:radial-gradient(circle, var(--glow) 0%, transparent 70%);
+  transition:all 0.5s var(--transition-smooth);
+  opacity:0.4;
+  z-index:9997;
+}
+a:hover ~ #cur, button:hover ~ #cur { transform:translate(-50%,-50%) scale(3); }
+a:hover ~ #cur2, button:hover ~ #cur2 { width:60px; height:60px; border-width:3px; }
+a:hover ~ #cur3, button:hover ~ #cur3 { width:140px; height:140px; opacity:0.7; }
 
-/* ─── SCROLLBAR ─── */
-::-webkit-scrollbar { width:4px; }
-::-webkit-scrollbar-track { background:#000; }
-::-webkit-scrollbar-thumb { background: linear-gradient(var(--gold), var(--amber)); border-radius:4px; }
-
-/* ─── NOISE OVERLAY ─── */
-body::before {
-  content:'';
-  position:fixed; inset:0;
-  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='1'/%3E%3C/svg%3E");
-  opacity:0.028; pointer-events:none; z-index:1;
+/* ============================================================
+   FORMES FLOTTANTES (animations lentes gauche/droite)
+============================================================ */
+.floating-shape {
+  position: fixed;
+  pointer-events: none;
+  z-index: 0;
+  opacity: 0.15;
+  filter: blur(2px);
+}
+.shape-circle {
+  border-radius: 50%;
+  background: var(--g1);
+  animation: floatLeftRight 25s ease-in-out infinite alternate;
+}
+.shape-line {
+  width: 2px;
+  background: var(--g1);
+  animation: floatRightLeft 20s ease-in-out infinite alternate;
+}
+.shape-triangle {
+  width: 0;
+  height: 0;
+  border-left: 30px solid transparent;
+  border-right: 30px solid transparent;
+  border-bottom: 50px solid var(--g1);
+  animation: floatDiagonal 30s ease-in-out infinite alternate;
+}
+@keyframes floatLeftRight {
+  0% { transform: translateX(-10vw) translateY(0) rotate(0deg); }
+  100% { transform: translateX(10vw) translateY(20vh) rotate(360deg); }
+}
+@keyframes floatRightLeft {
+  0% { transform: translateX(10vw) translateY(0) rotate(0deg); }
+  100% { transform: translateX(-10vw) translateY(30vh) rotate(-360deg); }
+}
+@keyframes floatDiagonal {
+  0% { transform: translate(0, 0) rotate(0deg); }
+  100% { transform: translate(15vw, 25vh) rotate(180deg); }
 }
 
-/* ─── CANVAS ─── */
-#starfield {
-  position:fixed; inset:0;
-  pointer-events:none; z-index:0;
-}
-
-.layer { position:relative; z-index:2; }
-
-/* ─── NAV ─── */
-nav {
-  position:fixed; top:0; left:0; width:100%;
-  z-index:500;
-  padding:22px 60px;
-  display:flex; align-items:center; justify-content:space-between;
-  transition: background 0.5s, padding 0.4s;
-}
-nav.scrolled {
-  background: rgba(5,4,7,0.92);
-  backdrop-filter: blur(20px);
-  padding: 14px 60px;
-  border-bottom: 1px solid var(--border);
-}
-.nav-brand {
-  font-family: 'Bebas Neue', sans-serif;
-  font-size: 1.5rem;
-  letter-spacing: 0.12em;
-  background: linear-gradient(135deg, var(--gold-bright), var(--amber));
-  -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-}
-.nav-links { display:flex; gap:36px; align-items:center; }
-.nav-links a {
-  color: var(--muted);
-  text-decoration:none; font-size:0.8rem;
-  letter-spacing:0.1em; text-transform:uppercase;
-  transition: color 0.3s;
-  font-weight:500;
-}
-.nav-links a:hover { color: var(--gold-bright); }
-.nav-cta {
-  background: transparent;
-  border: 1px solid var(--gold);
-  color: var(--gold-bright) !important;
-  padding: 8px 22px;
-  border-radius:2px;
-  font-size:0.75rem !important;
-  letter-spacing:0.15em !important;
-  cursor: none;
-  transition: background 0.3s, box-shadow 0.3s !important;
-}
-.nav-cta:hover {
-  background: rgba(201,168,76,0.12);
-  box-shadow: 0 0 20px rgba(201,168,76,0.2);
-}
-.burger { display:none; background:none; border:none; color:var(--gold); font-size:1.4rem; cursor:none; }
-
-/* ─── HERO ─── */
-#hero {
-  min-height:100vh;
-  display:flex; flex-direction:column;
-  justify-content:center; align-items:center;
-  text-align:center;
-  padding: 120px 40px 80px;
-  position:relative; overflow:hidden;
-}
-.hero-orb {
-  position:absolute;
-  border-radius:50%;
-  filter: blur(80px);
+/* ============================================================
+   INTRO CINÉMATIQUE
+============================================================ */
+#intro {
+  position:fixed; inset:0; z-index:8000;
+  display:flex; align-items:center; justify-content:center;
+  background:var(--ink);
   pointer-events:none;
-  animation: orbFloat 8s ease-in-out infinite alternate;
 }
-.hero-orb-1 {
-  width:600px; height:600px;
-  background: radial-gradient(circle, rgba(201,168,76,0.12), transparent 70%);
-  top:-200px; left:-100px;
-  animation-duration: 10s;
+.intro-bar-top, .intro-bar-bot {
+  position:absolute; left:0; right:0; height:50%; background:var(--ink);
+  transition:transform 1.2s cubic-bezier(0.76,0,0.24,1) 0.8s;
 }
-.hero-orb-2 {
-  width:400px; height:400px;
-  background: radial-gradient(circle, rgba(224,122,32,0.1), transparent 70%);
-  bottom:-100px; right:-50px;
-  animation-duration: 7s; animation-delay: -3s;
-}
-@keyframes orbFloat {
-  0% { transform: translate(0,0) scale(1); }
-  100% { transform: translate(30px, 40px) scale(1.1); }
-}
-
-.hero-eyebrow {
-  display:inline-flex; align-items:center; gap:10px;
-  font-size:0.72rem; letter-spacing:0.25em; text-transform:uppercase;
-  color: var(--gold);
-  border: 1px solid var(--border);
-  padding: 7px 18px; border-radius:2px;
-  margin-bottom:32px;
-  animation: fadeUp 1s ease 0.2s both;
-  background: rgba(201,168,76,0.05);
-}
-.hero-eyebrow span { width:16px; height:1px; background:var(--gold); }
-
-.hero-title {
-  font-family: 'Bebas Neue', sans-serif;
-  font-size: clamp(70px, 14vw, 190px);
-  line-height: 0.88;
-  letter-spacing: -0.01em;
-  margin-bottom: 28px;
-  animation: fadeUp 1s ease 0.4s both;
-}
-.hero-title .line-1 {
-  display:block;
-  background: linear-gradient(135deg, var(--cream) 30%, var(--gold-pale));
-  -webkit-background-clip:text; -webkit-text-fill-color:transparent;
-}
-.hero-title .line-2 {
-  display:block;
-  -webkit-text-stroke: 1.5px var(--gold);
-  color: transparent;
-  font-style:normal;
-}
-.hero-title .line-3 {
-  display:block;
-  background: linear-gradient(135deg, var(--gold), var(--amber));
-  -webkit-background-clip:text; -webkit-text-fill-color:transparent;
-}
-
-.hero-sub {
-  font-size:1.05rem; color: var(--muted);
-  font-style:italic;
-  max-width:480px;
-  margin: 0 auto 48px;
-  line-height:1.7;
-  font-family: 'Playfair Display', serif;
-  animation: fadeUp 1s ease 0.6s both;
-}
-
-.hero-actions {
-  display:flex; gap:18px; justify-content:center; flex-wrap:wrap;
-  animation: fadeUp 1s ease 0.8s both;
-}
-
-.btn-primary {
-  background: linear-gradient(135deg, var(--gold), var(--amber));
-  color: var(--black);
-  border:none; cursor:none;
-  padding:14px 36px; border-radius:2px;
-  font-family:'DM Sans'; font-weight:700;
-  font-size:0.8rem; letter-spacing:0.15em; text-transform:uppercase;
-  position:relative; overflow:hidden;
-  transition: box-shadow 0.3s, transform 0.2s;
-}
-.btn-primary::after {
-  content:''; position:absolute; inset:0;
-  background: linear-gradient(135deg, rgba(255,255,255,0.2), transparent);
-  opacity:0; transition:opacity 0.3s;
-}
-.btn-primary:hover { box-shadow:0 0 40px rgba(201,168,76,0.4); transform:translateY(-2px); }
-.btn-primary:hover::after { opacity:1; }
-
-.btn-ghost {
-  background:transparent;
-  color: var(--cream);
-  border: 1px solid rgba(245,237,219,0.2);
-  padding:14px 36px; border-radius:2px; cursor:none;
-  font-family:'DM Sans'; font-weight:500;
-  font-size:0.8rem; letter-spacing:0.15em; text-transform:uppercase;
-  transition: border-color 0.3s, color 0.3s, background 0.3s;
-}
-.btn-ghost:hover {
-  border-color: var(--gold);
-  color: var(--gold);
-  background: rgba(201,168,76,0.06);
-}
-
-/* ─── MARQUEE ─── */
-.marquee-wrap {
-  border-top: 1px solid var(--border);
-  border-bottom: 1px solid var(--border);
-  overflow:hidden;
-  padding:14px 0;
-  background: rgba(201,168,76,0.03);
-}
-.marquee-track {
-  display:flex; gap:0;
-  animation: marqueeAnim 28s linear infinite;
-  width:fit-content;
-}
-@keyframes marqueeAnim {
-  0% { transform:translateX(0); }
-  100% { transform:translateX(-50%); }
-}
-.marquee-item {
-  display:flex; align-items:center; gap:14px;
-  padding:0 40px; white-space:nowrap;
-  font-size:0.72rem; letter-spacing:0.2em; text-transform:uppercase;
-  color: var(--muted);
-}
-.marquee-item i { color:var(--gold); font-size:0.6rem; }
-
-/* ─── SECTION TITLES ─── */
-.section-label {
-  font-size:0.68rem; letter-spacing:0.3em; text-transform:uppercase;
-  color:var(--gold); margin-bottom:12px;
-  display:flex; align-items:center; gap:10px;
-}
-.section-label::before {
-  content:''; display:block; width:30px; height:1px; background:var(--gold);
-}
-.section-title {
-  font-family:'Playfair Display', serif;
-  font-size: clamp(36px, 5vw, 68px);
-  line-height:1.05;
-  font-weight:900;
-  color: var(--cream);
-}
-.section-title em {
-  font-style:italic;
-  color: transparent;
-  -webkit-text-stroke: 1px var(--gold-pale);
-}
-
-/* ─── NUMBERS SECTION ─── */
-#numbers {
-  padding:100px 60px;
-  display:grid; grid-template-columns: 1fr 1fr;
-  gap:0; border-bottom:1px solid var(--border);
-}
-.numbers-left {
-  padding-right:80px; border-right:1px solid var(--border);
-  display:flex; flex-direction:column; justify-content:center;
-}
-.numbers-left p {
-  margin-top:20px; color:var(--muted); font-size:1rem; line-height:1.8;
-  max-width:480px;
-}
-.numbers-right {
-  padding-left:80px;
-  display:grid; grid-template-columns:1fr 1fr;
-  gap:0;
-}
-.stat-box {
-  padding:50px 40px;
-  border-bottom:1px solid var(--border);
-  border-right:1px solid var(--border);
-  opacity:0; transform:translateY(30px);
-  transition: opacity 0.7s ease, transform 0.7s ease;
-}
-.stat-box:nth-child(2n) { border-right:none; }
-.stat-box:nth-child(n+3) { border-bottom:none; }
-.stat-box.visible { opacity:1; transform:translateY(0); }
-.stat-num {
-  font-family:'Bebas Neue', sans-serif;
-  font-size:clamp(52px, 5vw, 76px);
-  line-height:1;
-  background: linear-gradient(135deg, var(--gold-bright), var(--amber));
-  -webkit-background-clip:text; -webkit-text-fill-color:transparent;
-}
-.stat-label {
-  font-size:0.75rem; letter-spacing:0.15em; text-transform:uppercase;
-  color:var(--muted); margin-top:8px;
-}
-
-/* ─── SHOWCASE ─── */
-#showcase { padding:120px 60px; }
-.showcase-header { display:flex; justify-content:space-between; align-items:flex-end; margin-bottom:72px; }
-.showcase-header a { color:var(--gold); text-decoration:none; font-size:0.8rem; letter-spacing:0.15em; text-transform:uppercase; border-bottom:1px solid var(--gold); padding-bottom:2px; }
-
-.projects-grid {
-  display:grid;
-  grid-template-columns: 2fr 1fr 1fr;
-  grid-template-rows: auto auto;
-  gap:2px;
-}
-.proj-card {
-  position:relative; overflow:hidden;
-  background: var(--card-bg);
-  cursor:none;
-  opacity:0; transform:translateY(40px);
-  transition: opacity 0.8s ease, transform 0.8s ease;
-}
-.proj-card.visible { opacity:1; transform:translateY(0); }
-.proj-card:nth-child(1) { grid-row:1/3; min-height:520px; }
-.proj-card:nth-child(n+2) { min-height:256px; }
-
-.proj-img {
-  position:absolute; inset:0;
-  background-size:cover; background-position:center;
-  transition: transform 0.8s cubic-bezier(.25,.8,.25,1);
-  filter: saturate(0.6) brightness(0.6);
-}
-.proj-card:hover .proj-img { transform:scale(1.06); filter:saturate(0.8) brightness(0.75); }
-
-.proj-info {
-  position:absolute; bottom:0; left:0; right:0;
-  padding:28px;
-  background: linear-gradient(to top, rgba(5,4,7,0.95) 40%, transparent);
-  transform:translateY(8px); transition:transform 0.4s ease;
-}
-.proj-card:hover .proj-info { transform:translateY(0); }
-.proj-cat {
-  font-size:0.62rem; letter-spacing:0.2em; text-transform:uppercase;
-  color:var(--gold); margin-bottom:6px;
-}
-.proj-name {
-  font-family:'Playfair Display', serif;
-  font-size:1.3rem; font-weight:700; line-height:1.2;
-}
-.proj-card:nth-child(1) .proj-name { font-size:2rem; }
-.proj-tag {
-  display:inline-flex; align-items:center; gap:5px;
-  font-size:0.62rem; letter-spacing:0.12em; text-transform:uppercase;
-  border:1px solid var(--border);
-  padding:4px 10px; border-radius:2px;
-  margin-top:10px; color:var(--muted);
-  transition: border-color 0.3s, color 0.3s;
-}
-.proj-card:hover .proj-tag { border-color:var(--gold); color:var(--gold); }
-
-/* ─── CEREMONY TEASER ─── */
-#ceremony {
-  margin:2px; padding:100px 100px;
-  background: var(--card-bg);
-  display:grid; grid-template-columns:1fr 1fr; gap:80px;
-  align-items:center;
-  position:relative; overflow:hidden;
-}
-#ceremony::before {
-  content:'2025';
-  position:absolute; right:-20px; top:50%; transform:translateY(-50%);
-  font-family:'Bebas Neue', sans-serif;
-  font-size:380px; line-height:1;
-  color:rgba(201,168,76,0.04);
-  pointer-events:none; user-select:none;
-}
-.ceremony-info p {
-  color:var(--muted); font-size:1rem; line-height:1.8;
-  margin:20px 0 40px;
-}
-.ceremony-details {
-  display:flex; flex-direction:column; gap:20px;
-}
-.detail-row {
-  display:flex; align-items:center; gap:16px;
-  padding:18px 24px;
-  border:1px solid var(--border);
-  border-radius:2px;
-  font-size:0.85rem;
-  transition: border-color 0.3s, background 0.3s;
-  opacity:0; transform:translateX(30px);
-  transition: opacity 0.6s ease, transform 0.6s ease, border-color 0.3s;
-}
-.detail-row.visible { opacity:1; transform:translateX(0); }
-.detail-row:hover { border-color:var(--gold); background:rgba(201,168,76,0.05); }
-.detail-row i { color:var(--gold); width:18px; text-align:center; }
-.detail-row strong { color:var(--cream); }
-.detail-row span { color:var(--muted); font-size:0.8rem; }
-
-/* Countdown */
-.countdown-grid {
-  display:grid; grid-template-columns: repeat(4,1fr); gap:12px;
-  margin:40px 0;
-}
-.cd-block {
+.intro-bar-top { top:0; transform:translateY(0); }
+.intro-bar-bot { bottom:0; transform:translateY(0); }
+.intro-logo {
+  font-family:'Bebas Neue'; font-size:clamp(36px,7vw,90px);
+  letter-spacing:.12em; color:transparent;
+  -webkit-text-stroke:1px var(--g1);
+  opacity:0; transform:scale(0.92) rotateX(-30deg);
+  transition:opacity 0.6s 0.2s, transform 0.8s 0.2s var(--transition-bounce);
   text-align:center;
-  padding:24px 10px;
-  border:1px solid var(--border);
-  border-radius:2px;
-  background:rgba(201,168,76,0.04);
-  position:relative; overflow:hidden;
 }
-.cd-block::after {
-  content:''; position:absolute; bottom:0; left:0; right:0;
-  height:2px;
-  background: linear-gradient(90deg, transparent, var(--gold), transparent);
+.intro-logo span { display:block; font-size:clamp(24px,4vw,50px); -webkit-text-stroke:0; color:var(--g1); margin-top:20px; }
+.intro-logo.show { opacity:1; transform:scale(1) rotateX(0); }
+#intro.open .intro-bar-top { transform:translateY(-100%); }
+#intro.open .intro-bar-bot { transform:translateY(100%); }
+#intro.gone { display:none; }
+
+/* ============================================================
+   BOUTON TOGGLE THÈME
+============================================================ */
+.theme-toggle {
+  position: fixed;
+  bottom: 30px;
+  right: 30px;
+  z-index: 700;
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: 50px;
+  padding: 12px 18px;
+  cursor: none;
+  font-size: 1.2rem;
+  backdrop-filter: blur(12px);
+  transition: all 0.3s;
+  color: var(--g1);
 }
-.cd-num {
-  font-family:'Bebas Neue', sans-serif;
-  font-size:2.8rem; line-height:1;
-  color:var(--gold-bright);
-}
-.cd-label {
-  font-size:0.62rem; letter-spacing:0.18em; text-transform:uppercase;
-  color:var(--muted); margin-top:4px;
+.theme-toggle:hover {
+  transform: scale(1.1);
+  box-shadow: 0 0 20px var(--glow);
 }
 
-/* ─── CATEGORIES ─── */
-#categories { padding:120px 60px; }
-.cat-grid {
-  display:grid; grid-template-columns: repeat(3,1fr);
-  gap:2px; margin-top:72px;
+/* ============================================================
+   NAVIGATION
+============================================================ */
+nav {
+  position:fixed; top:0; left:0; right:0; z-index:500;
+  padding:28px 60px;
+  display:flex; align-items:center; justify-content:space-between;
+  transition:all 0.5s var(--transition-smooth);
+  backdrop-filter:blur(0px);
 }
-.cat-card {
-  padding:48px 40px;
-  background:var(--card-bg);
-  border:1px solid transparent;
-  position:relative; overflow:hidden;
-  cursor:none;
-  opacity:0; transform:translateY(40px);
-  transition: opacity 0.6s ease, transform 0.6s ease, border-color 0.4s, background 0.4s;
+nav.s {
+  padding:16px 60px;
+  background:rgba(3,2,10,.85);
+  backdrop-filter:blur(24px);
+  border-bottom:1px solid var(--line);
+  box-shadow:0 10px 40px rgba(0,0,0,0.3);
 }
-.cat-card.visible { opacity:1; transform:translateY(0); }
-.cat-card:hover { border-color:var(--border); background:#161224; }
-.cat-card::before {
-  content:''; position:absolute; bottom:0; left:0; right:0;
-  height:0; background: linear-gradient(0deg, rgba(201,168,76,0.08), transparent);
-  transition: height 0.5s;
+body.bw nav.s { background: rgba(255,255,255,0.9); }
+.nb {
+  font-family:'Bebas Neue'; font-size:1.6rem; letter-spacing:.12em;
+  background:linear-gradient(135deg,var(--g1),var(--g2),var(--g1));
+  background-size:200%;
+  -webkit-background-clip:text; -webkit-text-fill-color:transparent;
+  animation:shimmerNav 3s linear infinite;
 }
-.cat-card:hover::before { height:100%; }
-.cat-num {
-  font-family:'Bebas Neue', sans-serif;
-  font-size:3.5rem; color:rgba(201,168,76,0.12);
-  line-height:1; margin-bottom:20px;
-  transition: color 0.3s;
-}
-.cat-card:hover .cat-num { color:rgba(201,168,76,0.25); }
-.cat-icon { font-size:1.5rem; color:var(--gold); margin-bottom:16px; }
-.cat-name {
-  font-family:'Playfair Display', serif;
-  font-size:1.2rem; font-weight:700;
-  margin-bottom:10px; color:var(--cream);
-}
-.cat-desc { font-size:0.85rem; color:var(--muted); line-height:1.7; }
-.cat-link {
-  display:inline-flex; align-items:center; gap:6px;
-  margin-top:20px; font-size:0.72rem; letter-spacing:0.15em;
-  text-transform:uppercase; color:var(--gold);
-  opacity:0; transform:translateX(-8px);
-  transition: opacity 0.3s, transform 0.3s;
-}
-.cat-card:hover .cat-link { opacity:1; transform:translateX(0); }
-
-/* ─── EDITORIAL / NEWS ─── */
-#editorial { padding:120px 60px; background:var(--card-bg); }
-.editorial-grid { display:grid; grid-template-columns:1.5fr 1fr 1fr; gap:40px; margin-top:72px; }
-.article-main { grid-row:span 2; }
-.article-card {
-  padding-bottom:32px;
-  border-bottom:1px solid var(--border);
-  opacity:0; transform:translateY(30px);
-  transition: opacity 0.7s ease, transform 0.7s ease;
-  cursor:none;
-}
-.article-card.visible { opacity:1; transform:translateY(0); }
-.article-img {
-  width:100%; aspect-ratio:16/9; object-fit:cover;
-  margin-bottom:20px; filter:saturate(0.5) brightness(0.7);
-  transition: filter 0.4s;
-}
-.article-main .article-img { aspect-ratio:4/3; }
-.article-card:hover .article-img { filter:saturate(0.9) brightness(0.9); }
-.art-date { font-size:0.65rem; letter-spacing:0.2em; text-transform:uppercase; color:var(--gold); margin-bottom:8px; }
-.art-title {
-  font-family:'Playfair Display', serif; font-size:1.1rem; font-weight:700;
-  line-height:1.3; margin-bottom:8px; color:var(--cream);
-  transition: color 0.3s;
-}
-.article-main .art-title { font-size:1.6rem; }
-.article-card:hover .art-title { color:var(--gold-pale); }
-.art-excerpt { font-size:0.82rem; color:var(--muted); line-height:1.7; }
-.art-read {
-  display:inline-flex; align-items:center; gap:6px;
-  margin-top:12px; font-size:0.7rem; letter-spacing:0.15em; text-transform:uppercase;
-  color:var(--gold); text-decoration:none; border-bottom:1px solid var(--border);
-  padding-bottom:2px; transition: border-color 0.3s;
-}
-.art-read:hover { border-color:var(--gold); }
-
-/* ─── JURY ─── */
-#jury { padding:120px 60px; }
-.jury-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:32px; margin-top:72px; }
-.jury-card {
-  text-align:center;
-  opacity:0; transform:translateY(40px);
-  transition: opacity 0.7s ease, transform 0.7s ease;
-}
-.jury-card.visible { opacity:1; transform:translateY(0); }
-.jury-img {
-  width:100%; aspect-ratio:1;
-  background:var(--card-bg);
-  border:1px solid var(--border);
-  margin-bottom:18px;
-  overflow:hidden;
+@keyframes shimmerNav { 0%{background-position:0%} 100%{background-position:200%} }
+.nl { display:flex; gap:32px; align-items:center; }
+.nl a {
+  color:var(--muted); text-decoration:none;
+  font-size:.72rem; letter-spacing:.14em; text-transform:uppercase;
+  font-weight:500; transition:all 0.3s; cursor:none;
   position:relative;
 }
-.jury-img::after {
+.nl a::after {
+  content:''; position:absolute; bottom:-5px; left:0; width:0; height:2px;
+  background:linear-gradient(90deg,var(--g1),var(--g2));
+  transition:width 0.3s var(--transition-smooth);
+}
+.nl a:hover { color:var(--g1); }
+.nl a:hover::after { width:100%; }
+.nl .nc {
+  color:var(--g1) !important;
+  border:1px solid var(--line); padding:8px 22px;
+  transition:all 0.3s var(--transition-bounce) !important;
+}
+.nl .nc:hover { background:rgba(232,192,96,.12); box-shadow:0 0 30px rgba(232,192,96,.25); transform:translateY(-2px); }
+.burger { display:none; background:none; border:none; color:var(--g1); font-size:1.4rem; cursor:none; transition:transform 0.3s; }
+.burger:hover { transform:rotate(90deg); }
+
+/* ============================================================
+   HERO — ANIMATIONS LENTES GAUCHE/DROITE
+============================================================ */
+#hero {
+  min-height:100vh;
+  display:flex; flex-direction:column; align-items:center; justify-content:center;
+  text-align:center;
+  padding:140px 40px 100px;
+  position:relative; overflow:hidden;
+}
+.ray {
+  position:absolute; top:-20%;
+  width:3px; height:140%;
+  background:linear-gradient(to bottom, transparent, var(--glow), var(--g1), var(--glow), transparent);
+  transform-origin:top center;
+  animation:rayAnim 4s ease-in-out infinite alternate;
+  pointer-events:none;
+}
+.ray:nth-child(1){left:15%;animation-delay:0s;width:2px;}
+.ray:nth-child(2){left:30%;animation-delay:-0.8s;width:4px;}
+.ray:nth-child(3){left:45%;animation-delay:-1.5s;width:3px;}
+.ray:nth-child(4){left:60%;animation-delay:-0.5s;width:5px;}
+.ray:nth-child(5){left:75%;animation-delay:-2s;width:2px;}
+.ray:nth-child(6){left:90%;animation-delay:-1.2s;width:3px;}
+@keyframes rayAnim {
+  0%{opacity:0;transform:skewX(-5deg) scaleY(0.7);}
+  50%{opacity:1;}
+  100%{opacity:0.4;transform:skewX(5deg) scaleY(1.2);}
+}
+.particle {
+  position:absolute; border-radius:50%;
+  pointer-events:none;
+  background:radial-gradient(circle, var(--g1), transparent);
+  animation:particleFloat linear infinite;
+}
+@keyframes particleFloat {
+  0%{transform:translateY(0) scale(1);opacity:1;}
+  100%{transform:translateY(-100vh) scale(0);opacity:0;}
+}
+#hero::before {
   content:''; position:absolute; inset:0;
-  background: linear-gradient(to bottom, transparent 50%, rgba(201,168,76,0.15));
-  opacity:0; transition:opacity 0.4s;
+  background:radial-gradient(ellipse 70% 50% at 50% 55%, var(--glow), transparent 70%);
+  animation:spotPulse 3s ease-in-out infinite alternate;
 }
-.jury-card:hover .jury-img::after { opacity:1; }
-.jury-img img {
-  width:100%; height:100%; object-fit:cover;
-  filter:grayscale(60%); transition:filter 0.4s, transform 0.5s;
+@keyframes spotPulse {
+  0%{opacity:0.4;transform:scale(1);}
+  100%{opacity:1;transform:scale(1.15);}
 }
-.jury-card:hover .jury-img img { filter:grayscale(0%); transform:scale(1.04); }
-.jury-name {
-  font-family:'Playfair Display', serif; font-size:1rem; font-weight:700;
-  margin-bottom:4px;
+.h-tag {
+  display:inline-flex; align-items:center; gap:12px;
+  font-size:.65rem; letter-spacing:.28em; text-transform:uppercase;
+  color:var(--g1); border:1px solid var(--line);
+  padding:10px 28px; margin-bottom:40px;
+  background:rgba(232,192,96,.08);
+  animation:slideInDown 0.8s var(--transition-bounce) 0.2s both;
+  position:relative;
 }
-.jury-role { font-size:0.7rem; letter-spacing:0.15em; text-transform:uppercase; color:var(--gold); }
+@keyframes slideInDown { from{opacity:0;transform:translateY(-60px);} to{opacity:1;transform:translateY(0);} }
+.h-title {
+  font-family:'Bebas Neue';
+  font-size:clamp(72px,16vw,210px);
+  line-height:.88; margin-bottom:32px;
+}
+.h-title .t1, .h-title .t2, .h-title .t3 {
+  display:block;
+  animation:revealSlow 1s var(--transition-slow) forwards;
+  opacity:0;
+}
+.h-title .t1 { background:linear-gradient(170deg, #fff 20%, var(--cream) 50%, rgba(242,232,208,.6)); -webkit-background-clip:text; -webkit-text-fill-color:transparent; animation-delay:0.2s; }
+.h-title .t2 { -webkit-text-stroke:1.5px var(--g1); color:transparent; animation-delay:0.5s; position:relative; }
+.h-title .t2::after { content:attr(data-text); position:absolute; inset:0; background:linear-gradient(135deg,var(--g1),var(--g2),var(--g1)); background-size:200%; -webkit-background-clip:text; -webkit-text-fill-color:transparent; animation:shimmerText 2s linear 1s infinite; opacity:.5; }
+.h-title .t3 { background:linear-gradient(135deg,var(--g1) 0%,var(--g2) 50%,#7A4A08 100%); -webkit-background-clip:text; -webkit-text-fill-color:transparent; animation-delay:0.8s; }
+@keyframes revealSlow { from{opacity:0;transform:translateX(-30px);} to{opacity:1;transform:translateX(0);} }
+.h-sub {
+  font-family:'Cormorant Garamond'; font-style:italic;
+  font-size:clamp(1rem,2.2vw,1.4rem); color:rgba(242,232,208,.7);
+  max-width:580px; line-height:1.8; margin:0 auto 56px;
+  animation:fadeInScale 0.8s var(--transition-smooth) 1s both;
+}
+@keyframes fadeInScale { from{opacity:0;transform:scale(0.9);} to{opacity:1;transform:scale(1);} }
+.h-btns { display:flex; gap:20px; justify-content:center; flex-wrap:wrap; animation:fadeInUp 0.8s var(--transition-bounce) 1.2s both; }
+@keyframes fadeInUp { from{opacity:0;transform:translateY(50px);} to{opacity:1;transform:translateY(0);} }
+.btn-gold, .btn-line {
+  position:relative; overflow:hidden; cursor:none;
+  padding:16px 44px; font-family:'DM Sans'; font-weight:700;
+  font-size:.78rem; letter-spacing:.18em; text-transform:uppercase;
+  transition:all 0.3s var(--transition-bounce);
+}
+.btn-gold {
+  background:linear-gradient(135deg,var(--g1),var(--g2));
+  color:var(--ink); border:none;
+  clip-path:polygon(8px 0,100% 0,100% calc(100% - 8px),calc(100% - 8px) 100%,0 100%,0 8px);
+}
+.btn-gold:hover { transform:translateY(-5px) scale(1.02); box-shadow:0 15px 50px var(--glow); }
+.btn-line {
+  background:transparent; color:var(--cream);
+  border:1px solid rgba(242,232,208,.3);
+  clip-path:polygon(0 0,calc(100% - 8px) 0,100% 8px,100% 100%,8px 100%,0 calc(100% - 8px));
+}
+.btn-line:hover { border-color:var(--g1); color:var(--g1); transform:translateY(-3px); letter-spacing:.22em; }
+.h-scroll {
+  position:absolute; bottom:50px; left:50%; transform:translateX(-50%);
+  display:flex; flex-direction:column; align-items:center; gap:8px;
+  font-size:.6rem; letter-spacing:.25em; color:var(--muted);
+  animation:bounce 2s ease-in-out infinite;
+}
+@keyframes bounce { 0%,100%{transform:translateX(-50%) translateY(0);} 50%{transform:translateX(-50%) translateY(10px);} }
 
-/* ─── PARTNERS ─── */
-#partners {
-  padding:60px 0;
-  border-top:1px solid var(--border);
-  border-bottom:1px solid var(--border);
-  overflow:hidden;
+/* ============================================================
+   MARQUEE
+============================================================ */
+.mq {
+  border-top:1px solid var(--line); border-bottom:1px solid var(--line);
+  overflow:hidden; padding:20px 0;
+  background:linear-gradient(90deg, rgba(232,192,96,.05), rgba(200,144,42,.08), rgba(232,192,96,.05));
 }
-.partners-track { display:flex; gap:0; animation:scrollLogos 30s linear infinite; width:fit-content; }
-.partners-track:hover { animation-play-state:paused; }
-.partner-item {
-  padding:0 60px;
+.mq-t { display:flex; animation:mqa 25s linear infinite; width:fit-content; }
+.mq-item {
+  display:flex; align-items:center; gap:14px; padding:0 48px;
+  font-size:.7rem; letter-spacing:.22em; text-transform:uppercase;
+  white-space:nowrap; color:var(--muted);
+  border-right:1px solid var(--line);
+  transition:color 0.3s;
+}
+.mq-item:hover { color:var(--g1); }
+.mq-item i { transition:transform 0.3s; }
+.mq-item:hover i { transform:rotate(360deg); }
+@keyframes mqa { 0%{transform:translateX(0)} 100%{transform:translateX(-50%)} }
+
+/* ============================================================
+   SECTIONS — ANIMATIONS CASCADE LENTES
+============================================================ */
+.s-label {
   display:flex; align-items:center; gap:12px;
-  font-family:'Bebas Neue', sans-serif;
-  font-size:1rem; letter-spacing:0.12em;
-  color:rgba(122,112,128,0.5);
-  white-space:nowrap; cursor:none;
-  transition: color 0.3s;
-  border-right:1px solid var(--border);
+  font-size:.62rem; letter-spacing:.3em; text-transform:uppercase;
+  color:var(--g1); margin-bottom:16px;
 }
-.partner-item:hover { color:var(--gold); }
-.partner-item i { font-size:1.4rem; }
-@keyframes scrollLogos { 0%{transform:translateX(0)} 100%{transform:translateX(-50%)} }
+.s-label::before { content:''; width:50px; height:2px; background:linear-gradient(90deg,var(--g1),var(--g2)); }
+.s-title {
+  font-family:'Cormorant Garamond';
+  font-size:clamp(40px,6vw,80px); font-weight:700;
+  line-height:1; color:var(--cream);
+}
+.s-title em { font-style:italic; color:transparent; -webkit-text-stroke:1px rgba(232,192,96,.7); }
+.reveal-item { opacity:0; transition:all 1s var(--transition-slow); }
+.reveal-item.visible { opacity:1; }
+.reveal-left { transform:translateX(-80px); }
+.reveal-left.visible { transform:translateX(0); }
+.reveal-right { transform:translateX(80px); }
+.reveal-right.visible { transform:translateX(0); }
+.reveal-up { transform:translateY(60px); }
+.reveal-up.visible { transform:translateY(0); }
+.reveal-scale { transform:scale(0.8); opacity:0; }
+.reveal-scale.visible { transform:scale(1); opacity:1; }
 
-/* ─── FINAL CTA ─── */
+/* NUMBERS */
+#numbers {
+  display:grid; grid-template-columns:1fr 1fr;
+  min-height:70vh; border-bottom:1px solid var(--line);
+}
+.num-left {
+  padding:100px 80px;
+  background:var(--panel);
+  border-right:1px solid var(--line);
+  position:relative; overflow:hidden;
+}
+.num-left::before {
+  content:''; position:absolute; bottom:-80px; right:-80px;
+  width:400px; height:400px; border-radius:50%;
+  background:radial-gradient(circle, var(--glow), transparent 70%);
+  animation:rotateSlow 20s linear infinite;
+}
+@keyframes rotateSlow { from{transform:rotate(0deg);} to{transform:rotate(360deg);} }
+.num-left p { color:var(--muted); font-size:.95rem; line-height:1.9; margin-top:20px; max-width:440px; }
+.num-right { display:grid; grid-template-columns:1fr 1fr; }
+.nb-cell {
+  padding:60px 50px;
+  border-bottom:1px solid var(--line);
+  border-right:1px solid var(--line);
+  transition:all 0.4s var(--transition-smooth);
+}
+.nb-cell:hover { background:rgba(232,192,96,.08); transform:translateY(-5px); }
+.nb-val {
+  font-family:'Bebas Neue';
+  font-size:clamp(60px,6vw,88px); line-height:1;
+  background:linear-gradient(135deg,var(--g1),var(--g2));
+  -webkit-background-clip:text; -webkit-text-fill-color:transparent;
+}
+.nb-lbl { font-size:.65rem; letter-spacing:.18em; text-transform:uppercase; color:var(--muted); margin-top:6px; }
+
+/* SHOWCASE */
+#showcase { padding:120px 60px; }
+.sc-header { display:flex; justify-content:space-between; align-items:flex-end; margin-bottom:80px; }
+.sc-link {
+  font-size:.7rem; letter-spacing:.16em; text-transform:uppercase;
+  color:var(--g1); text-decoration:none; display:flex; align-items:center; gap:8px;
+  border-bottom:1px solid var(--line); padding-bottom:3px;
+  transition:all 0.3s;
+}
+.sc-link:hover { border-color:var(--g1); gap:12px; }
+.pg { display:grid; grid-template-columns:1.2fr .8fr .8fr; grid-template-rows:360px 280px; gap:3px; }
+.pc {
+  position:relative; overflow:hidden; cursor:none;
+  background:var(--panel);
+  transition:all 0.4s var(--transition-smooth);
+}
+.pc:nth-child(1) { grid-row:1/3; }
+.pi {
+  position:absolute; inset:0; background-size:cover; background-position:center;
+  transition:transform 0.8s var(--transition-smooth), filter 0.8s;
+  filter:saturate(.3) brightness(.45);
+}
+.pc:hover .pi { transform:scale(1.1); filter:saturate(1) brightness(.65); }
+.po {
+  position:absolute; inset:0;
+  background:linear-gradient(to top, rgba(3,2,10,.98) 0%, rgba(3,2,10,.4) 40%, transparent 80%);
+}
+.pinfo {
+  position:absolute; bottom:0; left:0; right:0; padding:32px 28px;
+  transform:translateY(20px); transition:transform 0.5s var(--transition-bounce);
+}
+.pc:hover .pinfo { transform:translateY(0); }
+.pcat { font-size:.58rem; letter-spacing:.22em; text-transform:uppercase; color:var(--g1); margin-bottom:8px; }
+.pname { font-family:'Cormorant Garamond'; font-weight:700; font-size:1.25rem; line-height:1.2; }
+.pc:nth-child(1) .pname { font-size:2.1rem; }
+.pbadge {
+  display:inline-flex; align-items:center; gap:5px; margin-top:12px;
+  font-size:.6rem; letter-spacing:.14em; text-transform:uppercase;
+  border:1px solid rgba(232,192,96,.3); padding:4px 12px; color:var(--muted);
+  transition:all 0.4s;
+}
+.pc:hover .pbadge { border-color:var(--g1); color:var(--g1); background:rgba(232,192,96,.1); transform:translateX(5px); }
+.pc::before {
+  content:''; position:absolute; top:0; right:0;
+  width:0; height:0;
+  border-style:solid; border-width:0 50px 50px 0;
+  border-color:transparent var(--g1) transparent transparent;
+  opacity:0; transition:opacity 0.4s; z-index:10;
+}
+.pc:hover::before { opacity:.5; }
+
+/* CEREMONY */
+#ceremony {
+  position:relative; overflow:hidden;
+  min-height:90vh;
+  display:flex; align-items:center;
+}
+.cer-bg {
+  position:absolute; inset:0;
+  background: linear-gradient(135deg, rgba(3,2,10,.95) 40%, rgba(13,10,24,.85) 100%),
+              url('https://images.unsplash.com/photo-1492684223066-81342ee5ff30?w=1600&q=80') center/cover no-repeat;
+  animation:bgZoom 20s ease-in-out infinite alternate;
+}
+@keyframes bgZoom { 0%{transform:scale(1);} 100%{transform:scale(1.05);} }
+.cer-bg::after {
+  content:''; position:absolute; inset:0;
+  background:radial-gradient(ellipse 80% 60% at 70% 50%, rgba(232,192,96,.08), transparent 70%);
+  animation:spotPulseCeremony 4s ease-in-out infinite alternate;
+}
+@keyframes spotPulseCeremony { 0%{opacity:0.5;transform:scale(1);} 100%{opacity:1;transform:scale(1.1);} }
+.cer-yr {
+  position:absolute; right:-30px; top:50%; transform:translateY(-50%);
+  font-family:'Bebas Neue'; font-size:clamp(200px,25vw,380px); line-height:1;
+  color:rgba(232,192,96,.04); pointer-events:none; user-select:none; z-index:1;
+  animation:pulseYear 3s ease-in-out infinite;
+}
+@keyframes pulseYear { 0%,100%{opacity:0.04;} 50%{opacity:0.1;} }
+.cer-wrap { position:relative; z-index:2; width:100%; padding:120px 60px; display:grid; grid-template-columns:1fr 1fr; gap:80px; align-items:center; }
+.cer-info p { color:var(--muted); font-size:.95rem; line-height:1.9; margin:20px 0 44px; }
+.cd { display:grid; grid-template-columns:repeat(4,1fr); gap:3px; margin-bottom:44px; }
+.cd-b {
+  padding:32px 16px; text-align:center;
+  background:rgba(13,10,24,.8); border:1px solid var(--line);
+  position:relative; overflow:hidden;
+  transition:all 0.4s var(--transition-smooth);
+}
+.cd-b:hover { border-color:rgba(232,192,96,.6); background:rgba(232,192,96,.1); transform:translateY(-5px); }
+.cd-b::after {
+  content:''; position:absolute; bottom:0; left:0; right:0; height:2px;
+  background:linear-gradient(90deg,transparent,var(--g1),transparent);
+  animation:cdLine 1.5s ease-in-out infinite;
+}
+@keyframes cdLine { 0%,100%{opacity:0.3;width:0;} 50%{opacity:1;width:100%;} }
+.cd-n { font-family:'Bebas Neue'; font-size:clamp(2.5rem,4vw,3.6rem); line-height:1; color:var(--g1); }
+.cd-l { font-size:.55rem; letter-spacing:.2em; text-transform:uppercase; color:var(--muted); margin-top:6px; }
+.cer-details { display:flex; flex-direction:column; gap:3px; }
+.cd-row {
+  display:flex; align-items:center; gap:18px; padding:20px 24px;
+  background:rgba(13,10,24,.7); border:1px solid var(--line);
+  transition:all 0.4s var(--transition-smooth);
+}
+.cd-row:hover { border-color:rgba(232,192,96,.5); background:rgba(232,192,96,.08); transform:translateX(10px); }
+.cd-row i { color:var(--g1); width:18px; text-align:center; }
+
+/* CATEGORIES */
+#categories { padding:120px 60px; background:var(--panel); }
+.cg { display:grid; grid-template-columns:repeat(4,1fr); gap:3px; margin-top:72px; }
+.cc {
+  padding:48px 36px; background:var(--ink);
+  position:relative; overflow:hidden; cursor:none;
+  border:1px solid transparent;
+  transition:all 0.4s var(--transition-smooth);
+}
+.cc:hover { border-color:var(--line); transform:translateY(-8px); box-shadow:0 20px 40px rgba(0,0,0,0.4); }
+.cc::after {
+  content:''; position:absolute; bottom:0; left:0; right:0;
+  height:0;
+  background:linear-gradient(0deg,rgba(232,192,96,.12),transparent);
+  transition:height 0.5s var(--transition-smooth);
+}
+.cc:hover::after { height:100%; }
+.cc-num { font-family:'Bebas Neue'; font-size:5rem; line-height:1; color:rgba(232,192,96,.07); margin-bottom:24px; transition:all 0.3s; }
+.cc:hover .cc-num { color:rgba(232,192,96,.25); transform:translateX(10px); }
+.cc-ic { color:var(--g1); font-size:1.3rem; margin-bottom:14px; transition:transform 0.3s; }
+.cc:hover .cc-ic { transform:rotate(10deg) scale(1.1); }
+.cc-name { font-family:'Cormorant Garamond'; font-size:1.15rem; font-weight:700; margin-bottom:10px; }
+.cc-desc { font-size:.8rem; color:var(--muted); line-height:1.7; }
+.cc-arrow {
+  position:absolute; bottom:28px; right:28px;
+  width:36px; height:36px; border:1px solid var(--line);
+  display:flex; align-items:center; justify-content:center;
+  color:var(--g1); font-size:.7rem;
+  opacity:0; transform:translateY(15px);
+  transition:all 0.4s var(--transition-bounce);
+}
+.cc:hover .cc-arrow { opacity:1; transform:translateY(0) rotate(360deg); border-color:var(--g1); }
+
+/* JURY */
+#jury { padding:120px 60px; }
+.jg { display:grid; grid-template-columns:repeat(4,1fr); gap:3px; margin-top:72px; }
+.jc { position:relative; overflow:hidden; cursor:none; transition:all 0.4s; }
+.jc:hover { transform:translateY(-10px); }
+.ji {
+  width:100%; aspect-ratio:3/4; overflow:hidden;
+  position:relative;
+}
+.ji img {
+  width:100%; height:100%; object-fit:cover;
+  filter:grayscale(.8) brightness(.6);
+  transition:all 0.7s var(--transition-smooth);
+}
+.jc:hover .ji img { filter:grayscale(0) brightness(.9); transform:scale(1.08); }
+.ji::after {
+  content:''; position:absolute; inset:0;
+  background:linear-gradient(to top,rgba(3,2,10,.9) 0%, transparent 60%);
+}
+.ji-overlay {
+  position:absolute; bottom:0; left:0; right:0; padding:24px 20px; z-index:2;
+  transform:translateY(20px); transition:transform 0.5s var(--transition-bounce);
+}
+.jc:hover .ji-overlay { transform:translateY(0); }
+.jname { font-family:'Cormorant Garamond'; font-size:1.05rem; font-weight:700; margin-bottom:4px; }
+.jrole { font-size:.6rem; letter-spacing:.15em; text-transform:uppercase; color:var(--g1); }
+.jc::before, .jc::after {
+  content:''; position:absolute; width:30px; height:30px; opacity:0; transition:all 0.4s; z-index:10;
+}
+.jc::before { top:20px; right:20px; border-top:2px solid var(--g1); border-right:2px solid var(--g1); }
+.jc::after { bottom:20px; left:20px; border-bottom:2px solid var(--g1); border-left:2px solid var(--g1); }
+.jc:hover::before, .jc:hover::after { opacity:1; }
+
+/* EDITORIAL */
+#editorial { padding:120px 60px; background:var(--panel); }
+.eg { display:grid; grid-template-columns:1.4fr 1fr 1fr; gap:0; border:1px solid var(--line); margin-top:72px; }
+.ea {
+  padding:40px 36px; border-right:1px solid var(--line);
+  cursor:none; position:relative; overflow:hidden;
+  transition:all 0.4s var(--transition-smooth);
+}
+.ea:last-child { border-right:none; }
+.ea::after {
+  content:''; position:absolute; bottom:0; left:0; right:0; height:0;
+  background:linear-gradient(0deg,rgba(232,192,96,.08),transparent);
+  transition:height 0.5s;
+}
+.ea:hover::after { height:100%; }
+.ea:hover { background:rgba(232,192,96,.03); transform:translateY(-5px); }
+.ea-img {
+  width:100%; aspect-ratio:16/9; object-fit:cover;
+  filter:saturate(.3) brightness(.6);
+  margin-bottom:24px;
+  transition:all 0.6s;
+}
+.ea:hover .ea-img { filter:saturate(1) brightness(.85); transform:scale(1.02); }
+.ea-date { font-size:.6rem; letter-spacing:.22em; text-transform:uppercase; color:var(--g1); margin-bottom:10px; }
+.ea-title { font-family:'Cormorant Garamond'; font-size:1.08rem; font-weight:700; line-height:1.3; margin-bottom:10px; transition:color 0.3s; }
+.ea:nth-child(1) .ea-title { font-size:1.5rem; }
+.ea:hover .ea-title { color:var(--g1); }
+.ea-exc { font-size:.8rem; color:var(--muted); line-height:1.7; }
+.ea-more {
+  display:inline-flex; align-items:center; gap:6px; margin-top:16px;
+  font-size:.65rem; letter-spacing:.14em; text-transform:uppercase;
+  color:var(--g1); border-bottom:1px solid var(--line); padding-bottom:2px;
+  text-decoration:none; transition:all 0.3s;
+}
+.ea-more:hover { gap:12px; border-color:var(--g1); }
+
+/* PARTNERS */
+#partners { padding:48px 0; border-top:1px solid var(--line); overflow:hidden; }
+.pt { display:flex; animation:mqa 30s linear infinite; width:fit-content; }
+.pt:hover { animation-play-state:paused; }
+.pi2 {
+  display:flex; align-items:center; gap:10px; padding:0 52px;
+  font-family:'Bebas Neue'; font-size:.9rem; letter-spacing:.12em;
+  color:rgba(107,96,128,.45); white-space:nowrap; cursor:none;
+  border-right:1px solid var(--line); transition:all 0.3s;
+}
+.pi2:hover { color:var(--g1); transform:scale(1.05); }
+.pi2 i { transition:transform 0.3s; }
+.pi2:hover i { transform:rotate(10deg); }
+
+/* CTA */
 #cta {
-  padding:140px 60px;
-  text-align:center; position:relative; overflow:hidden;
+  padding:160px 60px; text-align:center;
+  position:relative; overflow:hidden;
 }
 #cta::before {
   content:''; position:absolute; inset:0;
-  background:
-    radial-gradient(ellipse at 50% 50%, rgba(201,168,76,0.08), transparent 70%);
+  background:radial-gradient(ellipse 80% 60% at 50% 50%, var(--glow), transparent 70%);
+  animation:spotPulseCTA 3s ease-in-out infinite alternate;
 }
-.cta-title {
-  font-family:'Bebas Neue', sans-serif;
-  font-size:clamp(50px, 9vw, 130px);
-  line-height:0.95;
-  margin-bottom:24px;
+@keyframes spotPulseCTA { 0%{opacity:0.4;transform:scale(1);} 100%{opacity:1;transform:scale(1.2);} }
+#cta::after {
+  content:''; position:absolute; inset:0;
+  background:repeating-linear-gradient(-45deg, transparent, transparent 80px, rgba(232,192,96,.02) 80px, rgba(232,192,96,.02) 81px);
+  pointer-events:none;
 }
-.cta-title span:first-child {
-  display:block; color:var(--cream);
-}
-.cta-title span:last-child {
-  display:block;
-  -webkit-text-stroke:1.5px var(--gold);
-  color:transparent;
-}
-#cta p { color:var(--muted); font-size:1rem; max-width:500px; margin:0 auto 48px; line-height:1.8; font-style:italic; font-family:'Playfair Display', serif; }
+.cta-pre { font-size:.65rem; letter-spacing:.32em; text-transform:uppercase; color:var(--g1); margin-bottom:28px; display:block; animation:slideInDown 0.8s var(--transition-bounce) both; }
+.cta-h { font-family:'Bebas Neue'; font-size:clamp(56px,12vw,160px); line-height:.9; position:relative; z-index:1; }
+.cta-h .cl1 { display:block; color:var(--cream); animation:revealLeft 0.8s var(--transition-smooth) 0.2s both; }
+.cta-h .cl2 { display:block; color:transparent; -webkit-text-stroke:1.5px var(--g1); position:relative; animation:revealRight 0.8s var(--transition-smooth) 0.4s both; }
+.cta-h .cl2::after { content:attr(data-t); position:absolute; inset:0; background:linear-gradient(135deg,var(--g1),var(--g2),var(--g1)); background-size:300%; -webkit-background-clip:text; -webkit-text-fill-color:transparent; animation:shimmerTextCTA 3s linear infinite; opacity:.6; }
+@keyframes shimmerTextCTA { 0%{background-position:0%} 100%{background-position:300%} }
+.cta-sub { font-family:'Cormorant Garamond'; font-style:italic; color:var(--muted); font-size:1.05rem; max-width:500px; margin:28px auto 52px; line-height:1.8; position:relative; z-index:1; animation:fadeInScale 0.8s 0.6s both; }
+.cta-btns { display:flex; gap:16px; justify-content:center; flex-wrap:wrap; position:relative; z-index:1; animation:fadeInUp 0.8s var(--transition-bounce) 0.8s both; }
 
-/* ─── FOOTER ─── */
+/* FOOTER */
 footer {
-  background:var(--dark);
-  border-top:1px solid var(--border);
-  padding:72px 60px 40px;
+  background:var(--deep);
+  border-top:1px solid var(--line);
+  padding:80px 60px 40px;
 }
-.footer-top { display:grid; grid-template-columns:2fr 1fr 1fr 1fr; gap:60px; margin-bottom:60px; }
-.footer-brand {
-  font-family:'Bebas Neue', sans-serif; font-size:1.4rem; letter-spacing:0.12em;
-  background:linear-gradient(135deg,var(--gold-bright),var(--amber));
-  -webkit-background-clip:text; -webkit-text-fill-color:transparent;
-  margin-bottom:12px;
-}
-.footer-tagline { font-style:italic; color:var(--muted); font-size:0.85rem; font-family:'Playfair Display',serif; line-height:1.7; }
-footer h4 { font-size:0.7rem; letter-spacing:0.2em; text-transform:uppercase; color:var(--gold); margin-bottom:20px; }
+.ft { display:grid; grid-template-columns:2fr 1fr 1fr 1fr; gap:60px; margin-bottom:60px; }
+.fb { font-family:'Bebas Neue'; font-size:1.3rem; letter-spacing:.12em; background:linear-gradient(135deg,var(--g1),var(--g2)); -webkit-background-clip:text; -webkit-text-fill-color:transparent; margin-bottom:12px; }
+.ft-tag { font-family:'Cormorant Garamond'; font-style:italic; color:var(--muted); font-size:.88rem; line-height:1.8; }
+.ft-soc { display:flex; gap:10px; margin-top:24px; }
+.ft-soc a { width:34px; height:34px; display:flex; align-items:center; justify-content:center; border:1px solid var(--line); color:var(--muted); text-decoration:none; font-size:.78rem; transition:all 0.3s var(--transition-bounce); cursor:none; }
+.ft-soc a:hover { border-color:var(--g1); color:var(--g1); background:rgba(232,192,96,.1); transform:translateY(-3px) rotate(360deg); }
+footer h4 { font-size:.6rem; letter-spacing:.25em; text-transform:uppercase; color:var(--g1); margin-bottom:20px; }
 footer ul { list-style:none; display:flex; flex-direction:column; gap:10px; }
-footer li a { text-decoration:none; color:var(--muted); font-size:0.85rem; transition:color 0.3s; }
-footer li a:hover { color:var(--cream); }
-.footer-social { display:flex; gap:14px; margin-top:10px; }
-.footer-social a {
-  width:36px; height:36px; display:flex; align-items:center; justify-content:center;
-  border:1px solid var(--border); color:var(--muted); text-decoration:none;
-  font-size:0.85rem; transition:all 0.3s; cursor:none;
-}
-.footer-social a:hover { border-color:var(--gold); color:var(--gold-bright); background:rgba(201,168,76,0.08); }
-.footer-bottom {
-  padding-top:32px; border-top:1px solid var(--border);
-  display:flex; justify-content:space-between; align-items:center;
-  font-size:0.7rem; letter-spacing:0.1em; color:var(--muted);
-}
+footer li a { text-decoration:none; color:var(--muted); font-size:.82rem; transition:all 0.3s; cursor:none; }
+footer li a:hover { color:var(--cream); transform:translateX(5px); display:inline-block; }
+.fb2 { padding-top:32px; border-top:1px solid var(--line); display:flex; justify-content:space-between; align-items:center; font-size:.62rem; letter-spacing:.1em; color:var(--muted); }
 
-/* ─── ANIMATIONS ─── */
-@keyframes fadeUp {
-  from { opacity:0; transform:translateY(30px); }
-  to { opacity:1; transform:translateY(0); }
+/* MOBILE MENU */
+#mob {
+  position:fixed; inset:0; background:rgba(3,2,10,.98);
+  z-index:600; display:flex; flex-direction:column; align-items:center; justify-content:center;
+  gap:36px; transform:translateX(100%); transition:transform 0.5s var(--transition-smooth);
+  backdrop-filter:blur(30px);
 }
+#mob.open { transform:translateX(0); }
+#mob a {
+  font-family:'Bebas Neue'; font-size:2.2rem; letter-spacing:.1em;
+  color:var(--cream); text-decoration:none; transition:all 0.3s;
+  opacity:0; transform:translateX(50px);
+}
+#mob.open a { animation:slideInFromRight 0.5s var(--transition-bounce) forwards; }
+@keyframes slideInFromRight { to{opacity:1;transform:translateX(0);} }
+#mob a:nth-child(2){animation-delay:0.05s;}
+#mob a:nth-child(3){animation-delay:0.1s;}
+#mob a:nth-child(4){animation-delay:0.15s;}
+#mob a:nth-child(5){animation-delay:0.2s;}
+#mob a:nth-child(6){animation-delay:0.25s;}
+#mob a:hover { color:var(--g1); transform:translateX(10px); }
+.mob-x {
+  position:absolute; top:28px; right:28px;
+  background:none; border:none; color:var(--g1); font-size:1.5rem;
+  cursor:none; transition:transform 0.3s;
+}
+.mob-x:hover { transform:rotate(90deg); }
 
-/* ─── MOBILE MENU ─── */
-#mobileMenu {
-  position:fixed; inset:0; background:rgba(5,4,7,0.97);
-  z-index:600;
-  display:flex; flex-direction:column; justify-content:center; align-items:center;
-  gap:40px;
-  transform:translateX(100%);
-  transition:transform 0.5s cubic-bezier(.25,.8,.25,1);
-  backdrop-filter:blur(20px);
-}
-#mobileMenu.open { transform:translateX(0); }
-#mobileMenu a {
-  font-family:'Bebas Neue',sans-serif; font-size:2.5rem; letter-spacing:0.1em;
-  color:var(--cream); text-decoration:none; transition:color 0.3s;
-}
-#mobileMenu a:hover { color:var(--gold); }
-.menu-close { position:absolute; top:28px; right:28px; background:none; border:none; color:var(--gold); font-size:1.4rem; cursor:none; }
-
-/* ─── RESPONSIVE ─── */
+/* RESPONSIVE */
 @media (max-width:1100px) {
-  nav { padding:18px 30px; }
+  nav { padding:18px 28px; }
   #numbers { grid-template-columns:1fr; }
-  .numbers-left { padding-right:0; border-right:none; border-bottom:1px solid var(--border); padding-bottom:60px; margin-bottom:60px; }
-  .numbers-right { padding-left:0; }
-  .projects-grid { grid-template-columns:1fr 1fr; }
-  .proj-card:nth-child(1) { grid-column:span 2; grid-row:auto; }
-  #ceremony { padding:60px 40px; grid-template-columns:1fr; }
-  .cat-grid { grid-template-columns:repeat(2,1fr); }
-  .jury-grid { grid-template-columns:repeat(2,1fr); }
-  .editorial-grid { grid-template-columns:1fr; }
-  .footer-top { grid-template-columns:1fr 1fr; gap:40px; }
+  .num-left { border-right:none; border-bottom:1px solid var(--line); padding:80px 40px; }
+  .pg { grid-template-columns:1fr 1fr; grid-template-rows:auto; }
+  .pc:nth-child(1) { grid-column:span 2; }
+  .cer-wrap { grid-template-columns:1fr; padding:80px 40px; }
+  .cg { grid-template-columns:repeat(2,1fr); }
+  .jg { grid-template-columns:repeat(2,1fr); }
+  .eg { grid-template-columns:1fr; }
+  .ea { border-right:none; border-bottom:1px solid var(--line); }
+  .ft { grid-template-columns:1fr 1fr; gap:40px; }
 }
 @media (max-width:768px) {
-  .nav-links { display:none; }
+  .nl { display:none; }
   .burger { display:block; }
   nav { padding:16px 20px; }
-  #numbers { padding:60px 20px; }
-  .numbers-right { grid-template-columns:1fr 1fr; }
+  #hero { padding:120px 24px 100px; }
   #showcase, #categories, #editorial, #jury, #cta { padding:80px 20px; }
-  .projects-grid { grid-template-columns:1fr; }
-  .proj-card:nth-child(1) { grid-column:1; }
-  .cat-grid { grid-template-columns:1fr; }
-  .jury-grid { grid-template-columns:1fr 1fr; }
-  #ceremony { padding:60px 20px; }
-  .countdown-grid { grid-template-columns:repeat(2,1fr); }
-  footer { padding:50px 20px 30px; }
-  .footer-top { grid-template-columns:1fr; gap:30px; }
-  .footer-bottom { flex-direction:column; gap:10px; text-align:center; }
-  #cursor, #cursor-ring { display:none; }
+  .pg { grid-template-columns:1fr; }
+  .pc:nth-child(1) { grid-column:1; }
+  .cg, .jg { grid-template-columns:1fr; }
+  .cd { grid-template-columns:repeat(2,1fr); }
+  footer { padding:60px 20px 28px; }
+  .ft { grid-template-columns:1fr; gap:32px; }
+  .fb2 { flex-direction:column; gap:8px; text-align:center; }
+  #cur, #cur2, #cur3 { display:none; }
   body { cursor:auto; }
-  button, a { cursor:pointer !important; }
+  a, button { cursor:pointer !important; }
 }
 </style>
 </head>
 <body>
 
-<canvas id="starfield"></canvas>
-<div id="cursor"></div>
-<div id="cursor-ring"></div>
+<canvas id="cv"></canvas>
+<div id="cur"></div><div id="cur2"></div><div id="cur3"></div>
 
-<!-- MOBILE MENU -->
-<div id="mobileMenu">
-  <button class="menu-close" id="closeMenu"><i class="fas fa-times"></i></button>
-  <a href="#" onclick="closeNav()">Accueil</a>
-  <a href="#showcase" onclick="closeNav()">Projets</a>
-  <a href="#categories" onclick="closeNav()">Catégories</a>
-  <a href="#editorial" onclick="closeNav()">Actualités</a>
-  <a href="#ceremony" onclick="closeNav()">Cérémonie</a>
+<!-- Formes flottantes -->
+<div class="floating-shape shape-circle" style="width: 180px; height: 180px; top: 15%; left: -5%;"></div>
+<div class="floating-shape shape-line" style="height: 250px; top: 60%; right: -2%;"></div>
+<div class="floating-shape shape-triangle" style="bottom: 10%; left: 80%;"></div>
+<div class="floating-shape shape-circle" style="width: 120px; height: 120px; bottom: 30%; left: 85%; animation-duration: 35s;"></div>
+<div class="floating-shape shape-line" style="height: 180px; top: 20%; left: 10%; animation-duration: 28s;"></div>
+
+<!-- Intro -->
+<div id="intro">
+  <div class="intro-bar-top"></div>
+  <div class="intro-logo" id="ilogo">DIGIT'S CRÉA AWARDS<span>ÉDITION 2025</span></div>
+  <div class="intro-bar-bot"></div>
 </div>
 
-<div class="layer">
+<!-- Menu mobile -->
+<div id="mob">
+  <button class="mob-x" id="mx"><i class="fas fa-times"></i></button>
+  <a href="#">Accueil</a>
+  <a href="#showcase">Projets</a>
+  <a href="#categories">Catégories</a>
+  <a href="#jury">Jury</a>
+  <a href="#ceremony">Cérémonie</a>
+</div>
 
-  <!-- NAV -->
-  <nav id="navbar">
-    <div class="nav-brand">DIGIT'S CRÉA</div>
-    <div class="nav-links">
+<div class="l">
+  <nav id="nav">
+    <div class="nb">DIGIT'S CRÉA</div>
+    <div class="nl">
       <a href="#">Accueil</a>
       <a href="#showcase">Projets</a>
       <a href="#categories">Catégories</a>
-      <a href="#editorial">Actualités</a>
+      <a href="#jury">Jury</a>
       <a href="#ceremony">Cérémonie</a>
-      <a href="#" class="nav-cta">Candidater</a>
+      <a href="#" class="nc">Candidater</a>
     </div>
-    <button class="burger" id="burgerBtn"><i class="fas fa-bars"></i></button>
+    <button class="burger" id="bg"><i class="fas fa-bars"></i></button>
   </nav>
 
-  <!-- ═══ HERO ═══ -->
+  <!-- Hero -->
   <section id="hero">
-    <div class="hero-orb hero-orb-1"></div>
-    <div class="hero-orb hero-orb-2"></div>
-
-    <div class="hero-eyebrow">
-      <span></span>
-      Édition 2025 — Bénin & Afrique de l'Ouest
-      <span></span>
+    <div class="ray"></div><div class="ray"></div><div class="ray"></div><div class="ray"></div><div class="ray"></div><div class="ray"></div>
+    <div class="h-tag"><i class="fas fa-circle" style="font-size:.4rem"></i> Édition 2025 — Cotonou, Bénin <i class="fas fa-circle" style="font-size:.4rem"></i></div>
+    <h1 class="h-title"><span class="t1">DIGIT'S CRÉA</span><span class="t2" data-text="AWARDS">AWARDS</span><span class="t3">2025</span></h1>
+    <p class="h-sub">Une nuit d'exception pour célébrer les esprits créatifs<br>qui redéfinissent le digital et la technologie en Afrique.</p>
+    <div class="h-btns">
+      <button class="btn-gold"><i class="fas fa-play" style="margin-right:10px;font-size:.7rem"></i>Découvrir les projets</button>
+      <button class="btn-line"><i class="fas fa-ticket-alt" style="margin-right:10px;font-size:.7rem"></i>Réserver pour la cérémonie</button>
     </div>
-
-    <h1 class="hero-title">
-      <span class="line-1">L'EXCELLENCE</span>
-      <span class="line-2">NUMÉRIQUE</span>
-      <span class="line-3">CÉLÉBRÉE</span>
-    </h1>
-
-    <p class="hero-sub">
-      Une nuit pour honorer les esprits créatifs qui redéfinissent le digital,
-      le design et la technologie en Afrique.
-    </p>
-
-    <div class="hero-actions">
-      <button class="btn-primary"><i class="fas fa-compass" style="margin-right:8px"></i>Découvrir les projets</button>
-      <button class="btn-ghost"><i class="fas fa-calendar-star" style="margin-right:8px"></i>La cérémonie 2025</button>
-    </div>
+    <div class="h-scroll"><div class="h-scroll-line"></div>Défiler</div>
   </section>
 
-  <!-- MARQUEE -->
-  <div class="marquee-wrap">
-    <div class="marquee-track">
-      <div style="display:flex;gap:0;">
-        <div class="marquee-item"><i class="fas fa-star"></i> Innovation digitale</div>
-        <div class="marquee-item"><i class="fas fa-star"></i> Design UI/UX</div>
-        <div class="marquee-item"><i class="fas fa-star"></i> Impact social</div>
-        <div class="marquee-item"><i class="fas fa-star"></i> Startup de l'année</div>
-        <div class="marquee-item"><i class="fas fa-star"></i> Tech verte</div>
-        <div class="marquee-item"><i class="fas fa-star"></i> Coup de cœur jury</div>
-        <div class="marquee-item"><i class="fas fa-star"></i> Meilleure app mobile</div>
-        <div class="marquee-item"><i class="fas fa-star"></i> Créateur de l'année</div>
+  <!-- Marquee -->
+  <div class="mq">
+    <div class="mq-t">
+      <div style="display:flex">
+        <div class="mq-item"><i class="fas fa-star"></i> Innovation Digitale</div>
+        <div class="mq-item"><i class="fas fa-star"></i> Design UI/UX</div>
+        <div class="mq-item"><i class="fas fa-star"></i> Impact Social</div>
+        <div class="mq-item"><i class="fas fa-star"></i> Startup de l'Année</div>
+        <div class="mq-item"><i class="fas fa-star"></i> Tech Verte</div>
+        <div class="mq-item"><i class="fas fa-star"></i> App Mobile</div>
+        <div class="mq-item"><i class="fas fa-star"></i> Créateur de l'Année</div>
+        <div class="mq-item"><i class="fas fa-star"></i> Coup de Cœur Jury</div>
       </div>
-      <div style="display:flex;gap:0;">
-        <div class="marquee-item"><i class="fas fa-star"></i> Innovation digitale</div>
-        <div class="marquee-item"><i class="fas fa-star"></i> Design UI/UX</div>
-        <div class="marquee-item"><i class="fas fa-star"></i> Impact social</div>
-        <div class="marquee-item"><i class="fas fa-star"></i> Startup de l'année</div>
-        <div class="marquee-item"><i class="fas fa-star"></i> Tech verte</div>
-        <div class="marquee-item"><i class="fas fa-star"></i> Coup de cœur jury</div>
-        <div class="marquee-item"><i class="fas fa-star"></i> Meilleure app mobile</div>
-        <div class="marquee-item"><i class="fas fa-star"></i> Créateur de l'année</div>
+      <div style="display:flex">
+        <div class="mq-item"><i class="fas fa-star"></i> Innovation Digitale</div>
+        <div class="mq-item"><i class="fas fa-star"></i> Design UI/UX</div>
+        <div class="mq-item"><i class="fas fa-star"></i> Impact Social</div>
+        <div class="mq-item"><i class="fas fa-star"></i> Startup de l'Année</div>
+        <div class="mq-item"><i class="fas fa-star"></i> Tech Verte</div>
+        <div class="mq-item"><i class="fas fa-star"></i> App Mobile</div>
+        <div class="mq-item"><i class="fas fa-star"></i> Créateur de l'Année</div>
+        <div class="mq-item"><i class="fas fa-star"></i> Coup de Cœur Jury</div>
       </div>
     </div>
   </div>
 
-  <!-- ═══ NUMBERS ═══ -->
+  <!-- Numbers -->
   <section id="numbers">
-    <div class="numbers-left">
-      <div class="section-label">En chiffres</div>
-      <h2 class="section-title">Trois ans à<br>célébrer <em>l'excellence</em></h2>
-      <p>Depuis 2022, les Digit's Créa Awards réunissent chaque année les meilleurs talents du numérique ouest-africain pour une soirée de reconnaissance et d'inspiration.</p>
+    <div class="num-left reveal-item reveal-left">
+      <div class="s-label">Digit's Créa en chiffres</div>
+      <h2 class="s-title">Trois ans à<br>célébrer<br><em>l'excellence</em></h2>
+      <p>Depuis 2022, les Digit's Créa Awards réunissent chaque année les meilleurs talents numériques ouest-africains. Une plateforme de reconnaissance unique qui propulse les innovateurs vers la scène internationale.</p>
     </div>
-    <div class="numbers-right">
-      <div class="stat-box">
-        <div class="stat-num" data-target="1247">0</div>
-        <div class="stat-label">Candidatures reçues</div>
-      </div>
-      <div class="stat-box">
-        <div class="stat-num" data-target="38">0</div>
-        <div class="stat-label">Pays représentés</div>
-      </div>
-      <div class="stat-box">
-        <div class="stat-num" data-target="94">0</div>
-        <div class="stat-label">Lauréats depuis 3 ans</div>
-      </div>
-      <div class="stat-box">
-        <div class="stat-num" data-target="8">0</div>
-        <div class="stat-label">Catégories 2025</div>
-      </div>
+    <div class="num-right">
+      <div class="nb-cell reveal-item reveal-up"><div class="nb-val" data-t="1247">0</div><div class="nb-lbl">Candidatures reçues</div></div>
+      <div class="nb-cell reveal-item reveal-up" style="transition-delay:.1s"><div class="nb-val" data-t="38">0</div><div class="nb-lbl">Pays représentés</div></div>
+      <div class="nb-cell reveal-item reveal-up" style="transition-delay:.2s"><div class="nb-val" data-t="94">0</div><div class="nb-lbl">Lauréats depuis 3 ans</div></div>
+      <div class="nb-cell reveal-item reveal-up" style="transition-delay:.3s"><div class="nb-val" data-t="8">0</div><div class="nb-lbl">Catégories 2025</div></div>
     </div>
   </section>
 
-  <!-- ═══ SHOWCASE ═══ -->
+  <!-- Showcase -->
   <section id="showcase">
-    <div class="showcase-header">
-      <div>
-        <div class="section-label">Sélection officielle</div>
-        <h2 class="section-title">Projets en<br><em>compétition</em></h2>
-      </div>
-      <a href="#">Voir tous les nominés →</a>
+    <div class="sc-header">
+      <div class="reveal-item reveal-left"><div class="s-label">Sélection officielle 2025</div><h2 class="s-title">Les projets<br>en <em>compétition</em></h2></div>
+      <a href="#" class="sc-link reveal-item reveal-right">Voir tous les nominés <i class="fas fa-arrow-right"></i></a>
     </div>
-    <div class="projects-grid">
-      <div class="proj-card">
-        <div class="proj-img" style="background-image:url('https://images.unsplash.com/photo-1633356122102-3fe601e05bd2?w=800&q=80')"></div>
-        <div class="proj-info">
-          <div class="proj-cat">Innovation digitale • Finaliste</div>
-          <div class="proj-name">EcoSync AI — Plateforme d'optimisation énergétique intelligente</div>
-          <span class="proj-tag"><i class="fas fa-star"></i> Nominé 2025</span>
-        </div>
-      </div>
-      <div class="proj-card">
-        <div class="proj-img" style="background-image:url('https://images.unsplash.com/photo-1561070791-2526d30994b5?w=600&q=80')"></div>
-        <div class="proj-info">
-          <div class="proj-cat">Design UI/UX</div>
-          <div class="proj-name">NeoUI Design System</div>
-          <span class="proj-tag"><i class="fas fa-star"></i> Nominé 2025</span>
-        </div>
-      </div>
-      <div class="proj-card">
-        <div class="proj-img" style="background-image:url('https://images.unsplash.com/photo-1531297484001-80022131f5a1?w=600&q=80')"></div>
-        <div class="proj-info">
-          <div class="proj-cat">Impact social</div>
-          <div class="proj-name">SocialBridge Connect</div>
-          <span class="proj-tag"><i class="fas fa-star"></i> Nominé 2025</span>
-        </div>
-      </div>
-      <div class="proj-card">
-        <div class="proj-img" style="background-image:url('https://images.unsplash.com/photo-1620712943543-bcc4688e7485?w=600&q=80')"></div>
-        <div class="proj-info">
-          <div class="proj-cat">Startup de l'année</div>
-          <div class="proj-name">Quantum Leap Labs</div>
-          <span class="proj-tag"><i class="fas fa-star"></i> Nominé 2025</span>
-        </div>
-      </div>
-      <div class="proj-card">
-        <div class="proj-img" style="background-image:url('https://images.unsplash.com/photo-1518770660439-4636190af475?w=600&q=80')"></div>
-        <div class="proj-info">
-          <div class="proj-cat">Tech verte</div>
-          <div class="proj-name">GreenTech Future</div>
-          <span class="proj-tag"><i class="fas fa-star"></i> Nominé 2025</span>
-        </div>
-      </div>
+    <div class="pg">
+      <div class="pc reveal-item reveal-scale"><div class="pi" style="background-image:url('https://images.unsplash.com/photo-1633356122102-3fe601e05bd2?w=900&q=80')"></div><div class="po"></div><div class="pinfo"><div class="pcat">★ Finaliste — Innovation Digitale</div><div class="pname">EcoSync AI — Optimisation énergétique par intelligence artificielle</div><span class="pbadge"><i class="fas fa-award"></i> Nominé 2025</span></div></div>
+      <div class="pc reveal-item reveal-scale" style="transition-delay:.1s"><div class="pi" style="background-image:url('https://images.unsplash.com/photo-1561070791-2526d30994b5?w=600&q=80')"></div><div class="po"></div><div class="pinfo"><div class="pcat">Design UI/UX</div><div class="pname">NeoUI Design System</div><span class="pbadge"><i class="fas fa-award"></i> Nominé</span></div></div>
+      <div class="pc reveal-item reveal-scale" style="transition-delay:.2s"><div class="pi" style="background-image:url('https://images.unsplash.com/photo-1531297484001-80022131f5a1?w=600&q=80')"></div><div class="po"></div><div class="pinfo"><div class="pcat">Impact Social</div><div class="pname">SocialBridge Connect</div><span class="pbadge"><i class="fas fa-award"></i> Nominé</span></div></div>
+      <div class="pc reveal-item reveal-scale" style="transition-delay:.3s"><div class="pi" style="background-image:url('https://images.unsplash.com/photo-1620712943543-bcc4688e7485?w=600&q=80')"></div><div class="po"></div><div class="pinfo"><div class="pcat">Startup de l'Année</div><div class="pname">Quantum Leap Labs</div><span class="pbadge"><i class="fas fa-award"></i> Nominé</span></div></div>
+      <div class="pc reveal-item reveal-scale" style="transition-delay:.4s"><div class="pi" style="background-image:url('https://images.unsplash.com/photo-1518770660439-4636190af475?w=600&q=80')"></div><div class="po"></div><div class="pinfo"><div class="pcat">Tech Verte</div><div class="pname">GreenTech Future</div><span class="pbadge"><i class="fas fa-award"></i> Nominé</span></div></div>
     </div>
   </section>
 
-  <!-- ═══ CEREMONY ═══ -->
+  <!-- Ceremony -->
   <section id="ceremony">
-    <div class="ceremony-info">
-      <div class="section-label">La soirée</div>
-      <h2 class="section-title">Une nuit pour<br>l'<em>histoire</em></h2>
-      <p>Le 14 juin 2025, le Palais des Congrès de Cotonou accueille la cérémonie de remise des prix la plus attendue du digital africain. Une soirée de gala unique, retransmise en direct sur toutes les plateformes.</p>
-      <button class="btn-primary">Réserver une place</button>
-    </div>
-    <div>
-      <div class="countdown-grid">
-        <div class="cd-block">
-          <div class="cd-num" id="cd-days">--</div>
-          <div class="cd-label">Jours</div>
-        </div>
-        <div class="cd-block">
-          <div class="cd-num" id="cd-hours">--</div>
-          <div class="cd-label">Heures</div>
-        </div>
-        <div class="cd-block">
-          <div class="cd-num" id="cd-mins">--</div>
-          <div class="cd-label">Minutes</div>
-        </div>
-        <div class="cd-block">
-          <div class="cd-num" id="cd-secs">--</div>
-          <div class="cd-label">Secondes</div>
-        </div>
+    <div class="cer-bg"></div>
+    <div class="cer-yr">2025</div>
+    <div class="cer-wrap">
+      <div class="cer-info reveal-item reveal-left">
+        <div class="s-label">La Soirée</div>
+        <h2 class="s-title">Une nuit pour<br>l'<em>histoire</em></h2>
+        <p>Le 14 juin 2025, le Palais des Congrès de Cotonou accueille la cérémonie la plus attendue du digital africain. Une soirée de gala retransmise en direct sur toutes les plateformes, pour 350 invités triés sur le volet.</p>
+        <button class="btn-gold">Réserver ma place <i class="fas fa-arrow-right" style="margin-left:10px;font-size:.7rem"></i></button>
       </div>
-      <div class="ceremony-details">
-        <div class="detail-row">
-          <i class="fas fa-calendar"></i>
-          <div><strong>14 juin 2025</strong> <span>— Samedi soir, 19h00</span></div>
+      <div class="reveal-item reveal-right">
+        <div class="cd">
+          <div class="cd-b"><div class="cd-n" id="cdd">--</div><div class="cd-l">Jours</div></div>
+          <div class="cd-b"><div class="cd-n" id="cdh">--</div><div class="cd-l">Heures</div></div>
+          <div class="cd-b"><div class="cd-n" id="cdm">--</div><div class="cd-l">Minutes</div></div>
+          <div class="cd-b"><div class="cd-n" id="cds">--</div><div class="cd-l">Secondes</div></div>
         </div>
-        <div class="detail-row">
-          <i class="fas fa-map-marker-alt"></i>
-          <div><strong>Palais des Congrès</strong> <span>— Cotonou, Bénin</span></div>
-        </div>
-        <div class="detail-row">
-          <i class="fas fa-play-circle"></i>
-          <div><strong>Diffusion live</strong> <span>— YouTube, Instagram, TikTok</span></div>
-        </div>
-        <div class="detail-row">
-          <i class="fas fa-ticket-alt"></i>
-          <div><strong>Places limitées</strong> <span>— 350 invités</span></div>
+        <div class="cer-details">
+          <div class="cd-row reveal-item reveal-left" style="transition-delay:.1s"><i class="fas fa-calendar-star"></i><div><strong>14 Juin 2025</strong><span>— Samedi, 19h00</span></div></div>
+          <div class="cd-row reveal-item reveal-left" style="transition-delay:.2s"><i class="fas fa-map-marker-alt"></i><div><strong>Palais des Congrès</strong><span>— Cotonou, Bénin</span></div></div>
+          <div class="cd-row reveal-item reveal-left" style="transition-delay:.3s"><i class="fas fa-broadcast-tower"></i><div><strong>Diffusion live</strong><span>— YouTube · Instagram · TikTok</span></div></div>
+          <div class="cd-row reveal-item reveal-left" style="transition-delay:.4s"><i class="fas fa-ticket-alt"></i><div><strong>Places limitées</strong><span>— 350 invités seulement</span></div></div>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- ═══ CATEGORIES ═══ -->
+  <!-- Categories -->
   <section id="categories">
-    <div class="section-label">Awards 2025</div>
-    <h2 class="section-title">8 catégories,<br>8 <em>couronnes</em></h2>
-    <div class="cat-grid">
-      <div class="cat-card">
-        <div class="cat-num">01</div>
-        <div class="cat-icon"><i class="fas fa-microchip"></i></div>
-        <div class="cat-name">Innovation digitale</div>
-        <div class="cat-desc">Projets qui repoussent les frontières de la technologie et créent de nouveaux paradigmes.</div>
-        <div class="cat-link">Explorer <i class="fas fa-arrow-right"></i></div>
-      </div>
-      <div class="cat-card">
-        <div class="cat-num">02</div>
-        <div class="cat-icon"><i class="fas fa-paintbrush"></i></div>
-        <div class="cat-name">Design UI/UX</div>
-        <div class="cat-desc">Interfaces remarquables qui allient esthétique et fonctionnalité avec une précision rare.</div>
-        <div class="cat-link">Explorer <i class="fas fa-arrow-right"></i></div>
-      </div>
-      <div class="cat-card">
-        <div class="cat-num">03</div>
-        <div class="cat-icon"><i class="fas fa-heart"></i></div>
-        <div class="cat-name">Impact social</div>
-        <div class="cat-desc">Technologies qui transforment positivement la société et améliorent le quotidien des Africains.</div>
-        <div class="cat-link">Explorer <i class="fas fa-arrow-right"></i></div>
-      </div>
-      <div class="cat-card">
-        <div class="cat-num">04</div>
-        <div class="cat-icon"><i class="fas fa-rocket"></i></div>
-        <div class="cat-name">Startup de l'année</div>
-        <div class="cat-desc">Jeunes entreprises à croissance rapide qui redéfinissent leurs marchés avec audace.</div>
-        <div class="cat-link">Explorer <i class="fas fa-arrow-right"></i></div>
-      </div>
-      <div class="cat-card">
-        <div class="cat-num">05</div>
-        <div class="cat-icon"><i class="fas fa-leaf"></i></div>
-        <div class="cat-name">Tech verte</div>
-        <div class="cat-desc">Solutions durables et inclusives qui placent l'environnement au cœur du numérique.</div>
-        <div class="cat-link">Explorer <i class="fas fa-arrow-right"></i></div>
-      </div>
-      <div class="cat-card">
-        <div class="cat-num">06</div>
-        <div class="cat-icon"><i class="fas fa-mobile-alt"></i></div>
-        <div class="cat-name">Meilleure app mobile</div>
-        <div class="cat-desc">Applications mobiles qui captivent, simplifient et révolutionnent l'expérience utilisateur.</div>
-        <div class="cat-link">Explorer <i class="fas fa-arrow-right"></i></div>
-      </div>
-      <div class="cat-card">
-        <div class="cat-num">07</div>
-        <div class="cat-icon"><i class="fas fa-star"></i></div>
-        <div class="cat-name">Créateur de l'année</div>
-        <div class="cat-desc">L'individu dont la vision et la créativité ont marqué l'écosystème digital africain.</div>
-        <div class="cat-link">Explorer <i class="fas fa-arrow-right"></i></div>
-      </div>
-      <div class="cat-card">
-        <div class="cat-num">08</div>
-        <div class="cat-icon"><i class="fas fa-gem"></i></div>
-        <div class="cat-name">Coup de cœur jury</div>
-        <div class="cat-desc">La distinction spéciale pour le projet qui a profondément touché le cœur de nos experts.</div>
-        <div class="cat-link">Explorer <i class="fas fa-arrow-right"></i></div>
-      </div>
+    <div class="reveal-item reveal-up"><div class="s-label">Awards 2025</div><h2 class="s-title">8 Catégories,<br>8 <em>Couronnes</em></h2></div>
+    <div class="cg">
+      <div class="cc reveal-item reveal-up" style="transition-delay:.0s"><div class="cc-num">01</div><div class="cc-ic"><i class="fas fa-microchip"></i></div><div class="cc-name">Innovation Digitale</div><div class="cc-desc">Projets qui repoussent les frontières de la technologie.</div><div class="cc-arrow"><i class="fas fa-arrow-right"></i></div></div>
+      <div class="cc reveal-item reveal-up" style="transition-delay:.05s"><div class="cc-num">02</div><div class="cc-ic"><i class="fas fa-paintbrush"></i></div><div class="cc-name">Design UI/UX</div><div class="cc-desc">Interfaces remarquables alliant esthétique et fonctionnalité.</div><div class="cc-arrow"><i class="fas fa-arrow-right"></i></div></div>
+      <div class="cc reveal-item reveal-up" style="transition-delay:.1s"><div class="cc-num">03</div><div class="cc-ic"><i class="fas fa-heart"></i></div><div class="cc-name">Impact Social</div><div class="cc-desc">Technologies qui transforment positivement la société.</div><div class="cc-arrow"><i class="fas fa-arrow-right"></i></div></div>
+      <div class="cc reveal-item reveal-up" style="transition-delay:.15s"><div class="cc-num">04</div><div class="cc-ic"><i class="fas fa-rocket"></i></div><div class="cc-name">Startup de l'Année</div><div class="cc-desc">Jeunes entreprises à croissance rapide.</div><div class="cc-arrow"><i class="fas fa-arrow-right"></i></div></div>
+      <div class="cc reveal-item reveal-up" style="transition-delay:.2s"><div class="cc-num">05</div><div class="cc-ic"><i class="fas fa-leaf"></i></div><div class="cc-name">Tech Verte</div><div class="cc-desc">Solutions durables pour l'environnement.</div><div class="cc-arrow"><i class="fas fa-arrow-right"></i></div></div>
+      <div class="cc reveal-item reveal-up" style="transition-delay:.25s"><div class="cc-num">06</div><div class="cc-ic"><i class="fas fa-mobile-alt"></i></div><div class="cc-name">Meilleure App Mobile</div><div class="cc-desc">Applications qui révolutionnent l'expérience utilisateur.</div><div class="cc-arrow"><i class="fas fa-arrow-right"></i></div></div>
+      <div class="cc reveal-item reveal-up" style="transition-delay:.3s"><div class="cc-num">07</div><div class="cc-ic"><i class="fas fa-user-star"></i></div><div class="cc-name">Créateur de l'Année</div><div class="cc-desc">La vision et la créativité qui ont marqué l'année.</div><div class="cc-arrow"><i class="fas fa-arrow-right"></i></div></div>
+      <div class="cc reveal-item reveal-up" style="transition-delay:.35s"><div class="cc-num">08</div><div class="cc-ic"><i class="fas fa-gem"></i></div><div class="cc-name">Coup de Cœur Jury</div><div class="cc-desc">La distinction spéciale pour le projet inspirant.</div><div class="cc-arrow"><i class="fas fa-arrow-right"></i></div></div>
     </div>
   </section>
 
-  <!-- ═══ JURY ═══ -->
-  <section id="jury" style="background:var(--card-bg);">
-    <div class="section-label">Les experts</div>
-    <h2 class="section-title">Le jury<br><em>2025</em></h2>
-    <div class="jury-grid">
-      <div class="jury-card">
-        <div class="jury-img">
-          <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=300&q=80" alt="Jury">
-        </div>
-        <div class="jury-name">Kofi Mensah</div>
-        <div class="jury-role">CEO, TechAfrica Group</div>
-      </div>
-      <div class="jury-card">
-        <div class="jury-img">
-          <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=300&q=80" alt="Jury">
-        </div>
-        <div class="jury-name">Aminata Diallo</div>
-        <div class="jury-role">Head of Design, Orange</div>
-      </div>
-      <div class="jury-card">
-        <div class="jury-img">
-          <img src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=300&q=80" alt="Jury">
-        </div>
-        <div class="jury-name">Sébastien Okafor</div>
-        <div class="jury-role">Fondateur, Andela West</div>
-      </div>
-      <div class="jury-card">
-        <div class="jury-img">
-          <img src="https://images.unsplash.com/photo-1580489944761-15a19d654956?w=300&q=80" alt="Jury">
-        </div>
-        <div class="jury-name">Nadia Touré</div>
-        <div class="jury-role">Directrice, UNESCO Digital</div>
-      </div>
+  <!-- Jury -->
+  <section id="jury">
+    <div class="reveal-item reveal-up"><div class="s-label">Les Experts</div><h2 class="s-title">Le Jury <em>2025</em></h2></div>
+    <div class="jg">
+      <div class="jc reveal-item reveal-scale" style="transition-delay:.0s"><div class="ji"><img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&q=80" alt="Jury"><div class="ji-overlay"><div class="jname">Kofi Mensah</div><div class="jrole">CEO, TechAfrica Group</div></div></div></div>
+      <div class="jc reveal-item reveal-scale" style="transition-delay:.1s"><div class="ji"><img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=400&q=80" alt="Jury"><div class="ji-overlay"><div class="jname">Aminata Diallo</div><div class="jrole">Head of Design, Orange</div></div></div></div>
+      <div class="jc reveal-item reveal-scale" style="transition-delay:.2s"><div class="ji"><img src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=400&q=80" alt="Jury"><div class="ji-overlay"><div class="jname">Sébastien Okafor</div><div class="jrole">Fondateur, Andela West</div></div></div></div>
+      <div class="jc reveal-item reveal-scale" style="transition-delay:.3s"><div class="ji"><img src="https://images.unsplash.com/photo-1580489944761-15a19d654956?w=400&q=80" alt="Jury"><div class="ji-overlay"><div class="jname">Nadia Touré</div><div class="jrole">Dir. UNESCO Digital Africa</div></div></div></div>
     </div>
   </section>
 
-  <!-- ═══ EDITORIAL / NEWS ═══ -->
+  <!-- Editorial -->
   <section id="editorial">
-    <div class="showcase-header">
-      <div>
-        <div class="section-label">Presse & Actualités</div>
-        <h2 class="section-title">Dans l'<em>actualité</em></h2>
-      </div>
-      <a href="#">Toutes les nouvelles →</a>
-    </div>
-    <div class="editorial-grid">
-      <div class="article-card article-main">
-        <img class="article-img" src="https://images.unsplash.com/photo-1540575467063-178a50c2df87?w=800&q=80" alt="news">
-        <div class="art-date">12 Avril 2025</div>
-        <div class="art-title">Le jury 2025 révélé : des personnalités d'exception pour une édition historique des Digit's Créa Awards</div>
-        <div class="art-excerpt">Huit experts de renom, venus de Dakar à Lagos en passant par Paris, formeront le comité de sélection qui départagera les 94 finalistes de cette édition record...</div>
-        <a href="#" class="art-read">Lire l'article <i class="fas fa-arrow-right"></i></a>
-      </div>
-      <div class="article-card">
-        <img class="article-img" src="https://images.unsplash.com/photo-1551434678-e076c223a692?w=400&q=80" alt="news">
-        <div class="art-date">3 Avril 2025</div>
-        <div class="art-title">Record de candidatures : +42% par rapport à 2024</div>
-        <div class="art-excerpt">L'engouement pour cette 3e édition dépasse toutes les projections. Plus de 1 200 dossiers reçus depuis 38 pays.</div>
-        <a href="#" class="art-read">Lire l'article <i class="fas fa-arrow-right"></i></a>
-      </div>
-      <div class="article-card">
-        <img class="article-img" src="https://images.unsplash.com/photo-1475721027785-f74eccf877e2?w=400&q=80" alt="news">
-        <div class="art-date">28 Mars 2025</div>
-        <div class="art-title">La cérémonie 2025 diffusée en live mondial sur 5 plateformes</div>
-        <div class="art-excerpt">Pour la première fois, la soirée sera accessible en direct depuis n'importe quel coin du monde avec une interface immersive multi-langue.</div>
-        <a href="#" class="art-read">Lire l'article <i class="fas fa-arrow-right"></i></a>
-      </div>
-      <div class="article-card">
-        <img class="article-img" src="https://images.unsplash.com/photo-1522071820081-009f0129c71c?w=400&q=80" alt="news">
-        <div class="art-date">15 Mars 2025</div>
-        <div class="art-title">Partenariat stratégique avec Google for Startups Africa</div>
-        <div class="art-excerpt">Un accord majeur qui permettra aux lauréats de bénéficier d'un accompagnement exclusif de 6 mois.</div>
-        <a href="#" class="art-read">Lire l'article <i class="fas fa-arrow-right"></i></a>
-      </div>
+    <div class="sc-header reveal-item reveal-up"><div><div class="s-label">Presse & Actualités</div><h2 class="s-title">Dans l'<em>actualité</em></h2></div><a href="#" class="sc-link">Toutes les nouvelles <i class="fas fa-arrow-right"></i></a></div>
+    <div class="eg">
+      <div class="ea reveal-item reveal-left" style="transition-delay:.0s"><img class="ea-img" src="https://images.unsplash.com/photo-1540575467063-178a50c2df87?w=800&q=80" alt=""><div class="ea-date">12 Avril 2025</div><div class="ea-title">Le jury 2025 révélé : des personnalités d'exception pour une édition historique</div><div class="ea-exc">Huit experts de renom, venus de Dakar à Lagos en passant par Paris, formeront le comité de sélection.</div><a href="#" class="ea-more">Lire l'article <i class="fas fa-arrow-right"></i></a></div>
+      <div class="ea reveal-item reveal-up" style="transition-delay:.15s"><img class="ea-img" src="https://images.unsplash.com/photo-1551434678-e076c223a692?w=500&q=80" alt=""><div class="ea-date">3 Avril 2025</div><div class="ea-title">Record de candidatures : +42% par rapport à 2024</div><div class="ea-exc">L'engouement pour cette 3e édition dépasse toutes les projections.</div><a href="#" class="ea-more">Lire <i class="fas fa-arrow-right"></i></a></div>
+      <div class="ea reveal-item reveal-right" style="transition-delay:.3s"><img class="ea-img" src="https://images.unsplash.com/photo-1475721027785-f74eccf877e2?w=500&q=80" alt=""><div class="ea-date">28 Mars 2025</div><div class="ea-title">La cérémonie 2025 en live mondial sur 5 plateformes</div><div class="ea-exc">Pour la première fois, la soirée sera accessible en direct depuis n'importe où.</div><a href="#" class="ea-more">Lire <i class="fas fa-arrow-right"></i></a></div>
     </div>
   </section>
 
-  <!-- ═══ PARTNERS ═══ -->
+  <!-- Partners -->
   <section id="partners">
-    <div class="partners-track">
-      <div style="display:flex">
-        <div class="partner-item"><i class="fab fa-google"></i> Google</div>
-        <div class="partner-item"><i class="fab fa-microsoft"></i> Microsoft</div>
-        <div class="partner-item"><i class="fab fa-stripe-s"></i> Stripe</div>
-        <div class="partner-item"><i class="fab fa-figma"></i> Figma</div>
-        <div class="partner-item"><i class="fas fa-signal"></i> Orange</div>
-        <div class="partner-item"><i class="fab fa-aws"></i> AWS</div>
-        <div class="partner-item"><i class="fas fa-university"></i> BCEAO</div>
-        <div class="partner-item"><i class="fas fa-globe-africa"></i> UEMOA</div>
-      </div>
-      <div style="display:flex">
-        <div class="partner-item"><i class="fab fa-google"></i> Google</div>
-        <div class="partner-item"><i class="fab fa-microsoft"></i> Microsoft</div>
-        <div class="partner-item"><i class="fab fa-stripe-s"></i> Stripe</div>
-        <div class="partner-item"><i class="fab fa-figma"></i> Figma</div>
-        <div class="partner-item"><i class="fas fa-signal"></i> Orange</div>
-        <div class="partner-item"><i class="fab fa-aws"></i> AWS</div>
-        <div class="partner-item"><i class="fas fa-university"></i> BCEAO</div>
-        <div class="partner-item"><i class="fas fa-globe-africa"></i> UEMOA</div>
-      </div>
+    <div class="pt">
+      <div style="display:flex"><div class="pi2"><i class="fab fa-google"></i> Google</div><div class="pi2"><i class="fab fa-microsoft"></i> Microsoft</div><div class="pi2"><i class="fab fa-figma"></i> Figma</div><div class="pi2"><i class="fab fa-aws"></i> Amazon AWS</div><div class="pi2"><i class="fas fa-signal"></i> Orange Afrique</div><div class="pi2"><i class="fab fa-stripe-s"></i> Stripe</div><div class="pi2"><i class="fas fa-university"></i> BCEAO</div><div class="pi2"><i class="fas fa-globe-africa"></i> UEMOA</div></div>
+      <div style="display:flex"><div class="pi2"><i class="fab fa-google"></i> Google</div><div class="pi2"><i class="fab fa-microsoft"></i> Microsoft</div><div class="pi2"><i class="fab fa-figma"></i> Figma</div><div class="pi2"><i class="fab fa-aws"></i> Amazon AWS</div><div class="pi2"><i class="fas fa-signal"></i> Orange Afrique</div><div class="pi2"><i class="fab fa-stripe-s"></i> Stripe</div><div class="pi2"><i class="fas fa-university"></i> BCEAO</div><div class="pi2"><i class="fas fa-globe-africa"></i> UEMOA</div></div>
     </div>
   </section>
 
-  <!-- ═══ CTA FINAL ═══ -->
+  <!-- CTA -->
   <section id="cta">
-    <div class="section-label" style="justify-content:center;margin-bottom:24px">Candidatures ouvertes</div>
-    <h2 class="cta-title">
-      <span>VOTRE PROJET</span>
-      <span>MÉRITE LA SCÈNE</span>
-    </h2>
-    <p>Soumettez votre candidature avant le 31 mai 2025. Un jury d'experts évaluera chaque dossier avec la rigueur et l'attention qu'il mérite.</p>
-    <div style="display:flex;gap:16px;justify-content:center;flex-wrap:wrap">
-      <button class="btn-primary" style="font-size:0.85rem;padding:16px 44px"><i class="fas fa-paper-plane" style="margin-right:8px"></i>Soumettre ma candidature</button>
-      <button class="btn-ghost" style="font-size:0.85rem;padding:16px 44px">Voir le règlement</button>
-    </div>
+    <span class="cta-pre reveal-item reveal-up">Candidatures ouvertes jusqu'au 31 mai 2025</span>
+    <h2 class="cta-h"><span class="cl1 reveal-item reveal-left">VOTRE PROJET</span><span class="cl2 reveal-item reveal-right" data-t="MÉRITE LA SCÈNE">MÉRITE LA SCÈNE</span></h2>
+    <p class="cta-sub reveal-item reveal-scale">Soumettez votre dossier. Un jury d'experts dédiés évaluera chaque candidature avec la rigueur et l'attention qu'elle mérite.</p>
+    <div class="cta-btns"><button class="btn-gold" style="font-size:.82rem;padding:18px 52px"><i class="fas fa-paper-plane" style="margin-right:10px;font-size:.7rem"></i>Soumettre ma candidature</button><button class="btn-line" style="font-size:.82rem;padding:18px 52px">Voir le règlement complet</button></div>
   </section>
 
-  <!-- ═══ FOOTER ═══ -->
+  <!-- Footer -->
   <footer>
-    <div class="footer-top">
-      <div>
-        <div class="footer-brand">DIGIT'S CRÉA AWARDS</div>
-        <p class="footer-tagline">La cérémonie qui célèbre l'excellence numérique et la créativité technologique en Afrique de l'Ouest depuis 2022.</p>
-        <div class="footer-social" style="margin-top:24px">
-          <a href="#"><i class="fab fa-twitter"></i></a>
-          <a href="#"><i class="fab fa-instagram"></i></a>
-          <a href="#"><i class="fab fa-linkedin-in"></i></a>
-          <a href="#"><i class="fab fa-youtube"></i></a>
-          <a href="#"><i class="fab fa-tiktok"></i></a>
-        </div>
-      </div>
-      <div>
-        <h4>Navigation</h4>
-        <ul>
-          <li><a href="#">Accueil</a></li>
-          <li><a href="#showcase">Les projets</a></li>
-          <li><a href="#categories">Catégories</a></li>
-          <li><a href="#jury">Le jury</a></li>
-          <li><a href="#ceremony">La cérémonie</a></li>
-        </ul>
-      </div>
-      <div>
-        <h4>Légal</h4>
-        <ul>
-          <li><a href="#">À propos</a></li>
-          <li><a href="#">Règlement 2025</a></li>
-          <li><a href="#">Mentions légales</a></li>
-          <li><a href="#">Politique de confidentialité</a></li>
-          <li><a href="#">Presse & médias</a></li>
-        </ul>
-      </div>
-      <div>
-        <h4>Contact</h4>
-        <ul>
-          <li><a href="mailto:hello@digitscrea.com"><i class="fas fa-envelope" style="color:var(--gold);margin-right:8px"></i>hello@digitscrea.com</a></li>
-          <li><a href="#"><i class="fas fa-phone" style="color:var(--gold);margin-right:8px"></i>+229 97 00 00 00</a></li>
-          <li><a href="#"><i class="fas fa-map-marker-alt" style="color:var(--gold);margin-right:8px"></i>Cotonou, Bénin</a></li>
-        </ul>
-      </div>
+    <div class="ft">
+      <div><div class="fb">DIGIT'S CRÉA AWARDS</div><p class="ft-tag">La cérémonie qui célèbre l'excellence numérique et la créativité technologique en Afrique de l'Ouest depuis 2022.</p><div class="ft-soc"><a href="#"><i class="fab fa-twitter"></i></a><a href="#"><i class="fab fa-instagram"></i></a><a href="#"><i class="fab fa-linkedin-in"></i></a><a href="#"><i class="fab fa-youtube"></i></a><a href="#"><i class="fab fa-tiktok"></i></a></div></div>
+      <div><h4>Navigation</h4><ul><li><a href="#">Accueil</a></li><li><a href="#showcase">Les Projets</a></li><li><a href="#categories">Catégories</a></li><li><a href="#jury">Le Jury</a></li><li><a href="#ceremony">La Cérémonie</a></li></ul></div>
+      <div><h4>Légal</h4><ul><li><a href="#">À propos</a></li><li><a href="#">Règlement 2025</a></li><li><a href="#">Mentions légales</a></li><li><a href="#">Presse & Médias</a></li></ul></div>
+      <div><h4>Contact</h4><ul><li><a href="mailto:hello@digitscrea.com"><i class="fas fa-envelope" style="color:var(--g1);margin-right:8px;font-size:.75rem"></i>hello@digitscrea.com</a></li><li><a href="#"><i class="fas fa-phone" style="color:var(--g1);margin-right:8px;font-size:.75rem"></i>+229 97 00 00 00</a></li><li><a href="#"><i class="fas fa-map-marker-alt" style="color:var(--g1);margin-right:8px;font-size:.75rem"></i>Cotonou, Bénin</a></li></ul></div>
     </div>
-    <div class="footer-bottom">
-      <span>© 2025 Digit's Créa Awards — Tous droits réservés</span>
-      <span>Conçu avec passion pour l'Afrique numérique</span>
-    </div>
+    <div class="fb2"><span>© 2025 Digit's Créa Awards — Tous droits réservés</span><span>Conçu avec passion · Afrique Numérique</span></div>
   </footer>
+</div>
 
-</div><!-- end layer -->
+<button class="theme-toggle" id="themeToggle"><i class="fas fa-moon"></i> Noir & Blanc</button>
 
 <script>
-// ─── CUSTOM CURSOR
-const cursor = document.getElementById('cursor');
-const cursorRing = document.getElementById('cursor-ring');
-let mx = 0, my = 0, rx = 0, ry = 0;
-document.addEventListener('mousemove', e => { mx = e.clientX; my = e.clientY; cursor.style.left = (mx - 6) + 'px'; cursor.style.top = (my - 6) + 'px'; });
-function animRing() { rx += (mx - rx - 19) * 0.12; ry += (my - ry - 19) * 0.12; cursorRing.style.left = rx + 'px'; cursorRing.style.top = ry + 'px'; requestAnimationFrame(animRing); }
-animRing();
-document.querySelectorAll('a, button').forEach(el => {
-  el.addEventListener('mouseenter', () => { cursor.style.transform = 'scale(2.5)'; cursorRing.style.transform = 'scale(1.5)'; cursorRing.style.opacity = '0.2'; });
-  el.addEventListener('mouseleave', () => { cursor.style.transform = 'scale(1)'; cursorRing.style.transform = 'scale(1)'; cursorRing.style.opacity = '0.6'; });
-});
-
-// ─── STARFIELD CANVAS
-const canvas = document.getElementById('starfield');
-const ctx = canvas.getContext('2d');
-function resizeC() { canvas.width = window.innerWidth; canvas.height = window.innerHeight; }
-resizeC(); window.addEventListener('resize', resizeC);
-const stars = Array.from({length:200}, () => ({
-  x: Math.random(), y: Math.random(),
-  r: Math.random()*1.5+0.3,
-  a: Math.random()*0.6+0.1,
-  speed: Math.random()*0.0002+0.00005,
-  drift: (Math.random()-0.5)*0.0001
-}));
-const golds = Array.from({length:8}, () => ({
-  x: Math.random(), y: Math.random(),
-  r: Math.random()*2+1,
-  a: Math.random()*0.8+0.2,
-  speed: Math.random()*0.0003,
-  drift: (Math.random()-0.5)*0.00015
-}));
-function drawStars() {
-  ctx.clearRect(0,0,canvas.width,canvas.height);
-  stars.forEach(s => {
-    s.y -= s.speed; s.x += s.drift;
-    if(s.y < 0) { s.y = 1; s.x = Math.random(); }
-    ctx.beginPath();
-    ctx.arc(s.x*canvas.width, s.y*canvas.height, s.r, 0, Math.PI*2);
-    ctx.fillStyle = `rgba(245,237,219,${s.a})`;
-    ctx.fill();
-  });
-  golds.forEach(s => {
-    s.y -= s.speed; s.x += s.drift;
-    if(s.y < 0) { s.y = 1; s.x = Math.random(); }
-    ctx.beginPath();
-    ctx.arc(s.x*canvas.width, s.y*canvas.height, s.r, 0, Math.PI*2);
-    ctx.fillStyle = `rgba(201,168,76,${s.a})`;
-    ctx.shadowColor = '#C9A84C'; ctx.shadowBlur = 8;
-    ctx.fill(); ctx.shadowBlur = 0;
-  });
-  requestAnimationFrame(drawStars);
-}
-drawStars();
-
-// ─── NAV SCROLL
-const navbar = document.getElementById('navbar');
-window.addEventListener('scroll', () => {
-  navbar.classList.toggle('scrolled', window.scrollY > 60);
-});
-
-// ─── MOBILE MENU
-document.getElementById('burgerBtn').addEventListener('click', () => document.getElementById('mobileMenu').classList.add('open'));
-document.getElementById('closeMenu').addEventListener('click', closeNav);
-function closeNav() { document.getElementById('mobileMenu').classList.remove('open'); }
-
-// ─── COUNTDOWN TO JUNE 14, 2025
-function updateCd() {
-  const target = new Date('2025-06-14T19:00:00');
-  const now = new Date();
-  const diff = target - now;
-  if(diff <= 0) { ['cd-days','cd-hours','cd-mins','cd-secs'].forEach(id => document.getElementById(id).textContent='0'); return; }
-  const d = Math.floor(diff / 86400000);
-  const h = Math.floor((diff % 86400000) / 3600000);
-  const m = Math.floor((diff % 3600000) / 60000);
-  const s = Math.floor((diff % 60000) / 1000);
-  document.getElementById('cd-days').textContent = String(d).padStart(2,'0');
-  document.getElementById('cd-hours').textContent = String(h).padStart(2,'0');
-  document.getElementById('cd-mins').textContent = String(m).padStart(2,'0');
-  document.getElementById('cd-secs').textContent = String(s).padStart(2,'0');
-}
-setInterval(updateCd, 1000); updateCd();
-
-// ─── INTERSECTION OBSERVER
-function makeObserver(selector, delay=0) {
-  const els = document.querySelectorAll(selector);
-  const obs = new IntersectionObserver(entries => {
-    entries.forEach((e, i) => {
-      if(e.isIntersecting) {
-        setTimeout(() => e.target.classList.add('visible'), i * 120 + delay);
-        obs.unobserve(e.target);
-      }
-    });
-  }, { threshold: 0.15 });
-  els.forEach(el => obs.observe(el));
-}
-makeObserver('.stat-box', 0);
-makeObserver('.proj-card', 0);
-makeObserver('.cat-card', 0);
-makeObserver('.article-card', 0);
-makeObserver('.jury-card', 0);
-makeObserver('.detail-row', 0);
-
-// ─── ANIMATED COUNTERS
-function animCounter(el, target) {
-  let current = 0;
-  const step = target / 60;
-  const suffix = el.dataset.suffix || '';
-  const iv = setInterval(() => {
-    current += step;
-    if(current >= target) { el.textContent = target.toLocaleString() + suffix; clearInterval(iv); }
-    else el.textContent = Math.floor(current).toLocaleString() + suffix;
-  }, 25);
-}
-const numObs = new IntersectionObserver(entries => {
-  if(entries[0].isIntersecting) {
-    document.querySelectorAll('.stat-num').forEach(el => {
-      animCounter(el, parseInt(el.dataset.target));
-    });
-    numObs.disconnect();
+  // CURSOR (3 couches)
+  const C=document.getElementById('cur'), C2=document.getElementById('cur2'), C3=document.getElementById('cur3');
+  let mx=0,my=0,rx=0,ry=0,rx2=0,ry2=0;
+  document.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY;C.style.left=mx+'px';C.style.top=my+'px';});
+  function animateCursor(){
+    rx+=(mx-rx)*0.12; ry+=(my-ry)*0.12;
+    rx2+=(mx-rx2)*0.06; ry2+=(my-ry2)*0.06;
+    C2.style.left=rx+'px'; C2.style.top=ry+'px';
+    C3.style.left=rx2+'px'; C3.style.top=ry2+'px';
+    requestAnimationFrame(animateCursor);
   }
-}, { threshold:0.3 });
-const firstStat = document.querySelector('.stat-box');
-if(firstStat) numObs.observe(firstStat);
+  animateCursor();
+
+  // INTRO
+  setTimeout(()=>document.getElementById('ilogo').classList.add('show'),300);
+  setTimeout(()=>document.getElementById('intro').classList.add('open'),1200);
+  setTimeout(()=>document.getElementById('intro').classList.add('gone'),2600);
+
+  // TOGGLE THEME
+  const toggleBtn = document.getElementById('themeToggle');
+  toggleBtn.addEventListener('click',()=>{
+    document.body.classList.toggle('bw');
+    if(document.body.classList.contains('bw')) toggleBtn.innerHTML = '<i class="fas fa-sun"></i> Thème Or';
+    else toggleBtn.innerHTML = '<i class="fas fa-moon"></i> Noir & Blanc';
+  });
+
+  // SCROLL REVEAL
+  const observer = new IntersectionObserver(entries=>{
+    entries.forEach(entry=>{ if(entry.isIntersecting) entry.target.classList.add('visible'); });
+  },{threshold:0.1});
+  document.querySelectorAll('.reveal-item').forEach(el=>observer.observe(el));
+
+  // COUNTDOWN
+  function updateCountdown(){
+    const target=new Date('2025-06-14T19:00:00'), now=new Date(), diff=target-now;
+    if(diff<=0) return;
+    document.getElementById('cdd').textContent=String(Math.floor(diff/86400000)).padStart(2,'0');
+    document.getElementById('cdh').textContent=String(Math.floor((diff%86400000)/3600000)).padStart(2,'0');
+    document.getElementById('cdm').textContent=String(Math.floor((diff%3600000)/60000)).padStart(2,'0');
+    document.getElementById('cds').textContent=String(Math.floor((diff%60000)/1000)).padStart(2,'0');
+  }
+  setInterval(updateCountdown,1000); updateCountdown();
+
+  // COUNTERS (numbers)
+  const counterObserver = new IntersectionObserver(entries=>{
+    if(!entries[0].isIntersecting) return;
+    document.querySelectorAll('.nb-val').forEach(el=>{
+      const target=parseInt(el.dataset.t);
+      let current=0, step=target/70;
+      const interval=setInterval(()=>{
+        current=Math.min(current+step,target);
+        el.textContent=Math.floor(current).toLocaleString();
+        if(current>=target) clearInterval(interval);
+      },20);
+    });
+    counterObserver.disconnect();
+  },{threshold:0.3});
+  const firstCell = document.querySelector('.nb-cell');
+  if(firstCell) counterObserver.observe(firstCell);
+
+  // NAV SCROLL
+  window.addEventListener('scroll',()=>document.getElementById('nav').classList.toggle('s',window.scrollY>60));
+
+  // MOBILE MENU
+  document.getElementById('bg').addEventListener('click',()=>document.getElementById('mob').classList.add('open'));
+  document.getElementById('mx').addEventListener('click',()=>document.getElementById('mob').classList.remove('open'));
+  document.querySelectorAll('#mob a').forEach(a=>a.addEventListener('click',()=>document.getElementById('mob').classList.remove('open')));
+
+  // PARALLAX RAYS
+  window.addEventListener('scroll',()=>{
+    const progress=window.scrollY/innerHeight;
+    document.querySelectorAll('.ray').forEach((ray,i)=>{
+      ray.style.transform=`translateY(${progress*25*(i%2===0?1:-1)}px) skewX(${progress*4}deg)`;
+    });
+    const yearEl=document.querySelector('.cer-yr');
+    if(yearEl) yearEl.style.transform=`translateY(calc(-50% + ${progress*40}px))`;
+  });
+
+  // PARTICLES (bokeh)
+  const heroSection=document.getElementById('hero');
+  for(let i=0;i<35;i++){
+    const p=document.createElement('div');p.className='particle';
+    const size=Math.random()*6+3;
+    const duration=Math.random()*15+8;
+    const delay=Math.random()*20;
+    p.style.cssText=`width:${size}px;height:${size}px;left:${Math.random()*100}%;bottom:-20px;background:radial-gradient(circle,var(--g1),transparent);animation:particleFloat ${duration}s linear ${delay}s infinite;filter:blur(${size/4}px);opacity:${Math.random()*0.5+0.3};`;
+    heroSection.appendChild(p);
+  }
+
+  // STARS CANVAS
+  const cv=document.getElementById('cv'), ctx=cv.getContext('2d');
+  function resizeCanvas(){ cv.width=window.innerWidth; cv.height=window.innerHeight; }
+  resizeCanvas(); window.addEventListener('resize',resizeCanvas);
+  const stars=[...Array(200)].map(()=>({x:Math.random(),y:Math.random(),r:Math.random()*1.5+0.3,a:Math.random()*0.5+0.1,s:Math.random()*0.0002+0.00004,d:(Math.random()-0.5)*0.0001,g:Math.random()<0.1}));
+  function drawStars(){
+    ctx.clearRect(0,0,cv.width,cv.height);
+    stars.forEach(s=>{
+      s.y-=s.s; s.x+=s.d;
+      if(s.y<0){ s.y=1; s.x=Math.random(); }
+      if(s.x<0||s.x>1) s.x=Math.random();
+      ctx.beginPath();
+      ctx.arc(s.x*cv.width,s.y*cv.height,s.r,0,Math.PI*2);
+      if(s.g){ ctx.fillStyle=`rgba(232,192,96,${s.a*1.2})`; ctx.shadowColor='#C8902A'; ctx.shadowBlur=10; }
+      else{ ctx.fillStyle=`rgba(242,232,208,${s.a})`; ctx.shadowBlur=0; }
+      ctx.fill();
+      ctx.shadowBlur=0;
+    });
+    requestAnimationFrame(drawStars);
+  }
+  drawStars();
+
+  // RIPPLE EFFECT ON BUTTONS
+  document.querySelectorAll('.btn-gold,.btn-line').forEach(btn=>{
+    btn.addEventListener('click',e=>{
+      const ripple=document.createElement('span');
+      const rect=btn.getBoundingClientRect();
+      ripple.style.cssText=`position:absolute;width:8px;height:8px;border-radius:50%;background:rgba(232,192,96,0.7);left:${e.clientX-rect.left}px;top:${e.clientY-rect.top}px;transform:translate(-50%,-50%) scale(0);pointer-events:none;animation:rippleAnim 0.6s ease-out forwards;`;
+      btn.appendChild(ripple);
+      setTimeout(()=>ripple.remove(),600);
+    });
+  });
+  const rippleStyle=document.createElement('style');
+  rippleStyle.textContent='@keyframes rippleAnim{to{transform:translate(-50%,-50%) scale(70);opacity:0;}}';
+  document.head.appendChild(rippleStyle);
+
+  // 3D TILT ON CARDS
+  document.querySelectorAll('.pc,.cc,.jc').forEach(card=>{
+    card.addEventListener('mousemove',e=>{
+      const rect=card.getBoundingClientRect();
+      const x=(e.clientX-rect.left)/rect.width-0.5;
+      const y=(e.clientY-rect.top)/rect.height-0.5;
+      card.style.transform=`perspective(1000px) rotateY(${x*12}deg) rotateX(${-y*10}deg) translateY(-5px)`;
+    });
+    card.addEventListener('mouseleave',()=>{
+      card.style.transition='transform 0.5s cubic-bezier(0.34, 1.2, 0.64, 1)';
+      card.style.transform='perspective(1000px) rotateY(0) rotateX(0) translateY(0)';
+      setTimeout(()=>card.style.transition='',500);
+    });
+  });
 </script>
 </body>
 </html>
